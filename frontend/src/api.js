@@ -16,5 +16,12 @@ export const api = {
   menu: () => req('/menu'),
   placeOrder: (body) => req('/orders', { method: 'POST', body: JSON.stringify(body) }),
   track: (id) => req(`/orders/${encodeURIComponent(id)}`),
+  confirmOrder: (id, body) => req(`/orders/${encodeURIComponent(id)}/confirm`, { method: 'POST', body: JSON.stringify(body) }),
+  cancelOrder: (id, body) => req(`/orders/${encodeURIComponent(id)}/cancel`, { method: 'POST', body: JSON.stringify(body) }),
+  rateOrder: (id, body) => req(`/orders/${encodeURIComponent(id)}/rate`, { method: 'POST', body: JSON.stringify(body) }),
+  payCreate: (body) => req('/payments/create', { method: 'POST', body: JSON.stringify(body) }),
+  payVerify: (body) => req('/payments/verify', { method: 'POST', body: JSON.stringify(body) }),
+  payEvent: (body) => req('/payments/event', { method: 'POST', body: JSON.stringify(body) }).catch(() => {}),
+  payDemo: (body) => req('/payments/demo', { method: 'POST', body: JSON.stringify(body) }),
   contact: (body) => req('/contact', { method: 'POST', body: JSON.stringify(body) }),
 }

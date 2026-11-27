@@ -8,8 +8,9 @@ import Menu from './pages/Menu.jsx'
 import Tracking from './pages/Tracking.jsx'
 import Contact from './pages/Contact.jsx'
 import Cart from './pages/Cart.jsx'
+import Policy from './pages/Policy.jsx'
 
-const titles = { '/': 'Home', '/about': 'About us', '/menu': 'Menu', '/tracking': 'Order tracking', '/contact': 'Contact', '/cart': 'Your order' }
+const titles = { '/': 'Home', '/about': 'About us', '/menu': 'Menu', '/tracking': 'Order tracking', '/contact': 'Contact', '/cart': 'Your order', '/cancellation-policy': 'Cancellation policy' }
 
 export default function App() {
   const { pathname } = useLocation()
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/tracking" element={<Tracking />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/cancellation-policy" element={<Policy />} />
           <Route path="*" element={<Home />} />
         </Routes>
       </main>

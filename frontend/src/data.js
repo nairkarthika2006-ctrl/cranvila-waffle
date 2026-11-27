@@ -3,9 +3,15 @@ export const PHONE_LINK = 'tel:+919876543210'
 export const EMAIL = 'hello@cranvilawaffle.com'
 export const DELIVERY_FEE = 30
 export const FREE_DELIVERY_ABOVE = 499
+export const DELIVERY_GST = 18
+export const ITEM_GST = 5
+
+// Add your street / shop number to ADDRESS and MAP_QUERY (e.g. 'Shop 5, ... Bhestan, Surat') to drop the pin exactly on the shop. The map on the Contact page is built from MAP_QUERY.
+export const ADDRESS = ['Cranvila Waffle, Bhestan', 'Surat, Gujarat 394210']
+export const MAP_QUERY = 'Bhestan, Surat, Gujarat 394210'
 
 export const img = (name) => `${import.meta.env.BASE_URL}images/${name}`
-export const rupee = (n) => `₹${n}`
+export const rupee = (n) => `₹${Number.isInteger(n) ? n : n.toFixed(2)}`
 
 // Fallback menu, used only if the backend cannot be reached. The backend list is the source of truth.
 export const items = [
@@ -28,3 +34,11 @@ export const filters = [
 ]
 
 export const steps = ['Order placed', 'Preparing', 'Out for delivery', 'Delivered']
+
+export const PAY_OPTIONS = [
+  { key: 'cod', method: 'cod', app: null, label: 'Cash on delivery', hint: 'Pay the rider in cash. You will need to confirm the order right after placing it.' },
+  { key: 'gpay', method: 'online', app: 'gpay', label: 'Google Pay', hint: 'Pay now with the Google Pay UPI app.' },
+  { key: 'phonepe', method: 'online', app: 'phonepe', label: 'PhonePe', hint: 'Pay now with the PhonePe UPI app.' },
+  { key: 'upi', method: 'online', app: 'upi', label: 'Other UPI app', hint: 'Paytm, BHIM, bank apps or a UPI ID.' },
+]
+export const PAY_LABEL = { gpay: 'Google Pay', phonepe: 'PhonePe', upi: 'UPI' }

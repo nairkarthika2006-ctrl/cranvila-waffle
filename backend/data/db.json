@@ -1,5 +1,5 @@
 {
-  "nextOrder": 1007,
+  "nextOrder": 1020,
   "orders": [
     {
       "id": "CW1001",
@@ -19,7 +19,25 @@
       ],
       "subtotal": 259,
       "deliveryFee": 30,
-      "total": 289
+      "total": 289,
+      "startedAt": "2026-11-25T10:32:39.914Z",
+      "gst": {
+        "cgst": 0,
+        "sgst": 0,
+        "total": 0
+      },
+      "gstRate": 0,
+      "paymentMethod": "cod",
+      "paymentStatus": "cod_due",
+      "paymentRef": null,
+      "paidAt": null,
+      "cancelled": null,
+      "notResponding": null,
+      "status": "confirmed",
+      "confirmedAt": "2026-11-25T10:32:39.914Z",
+      "confirmedBy": "legacy",
+      "deliveryGst": 0,
+      "cancellation": null
     },
     {
       "id": "CW1002",
@@ -39,7 +57,25 @@
       ],
       "subtotal": 279,
       "deliveryFee": 30,
-      "total": 309
+      "total": 309,
+      "startedAt": "2026-11-25T10:32:39.914Z",
+      "gst": {
+        "cgst": 0,
+        "sgst": 0,
+        "total": 0
+      },
+      "gstRate": 0,
+      "paymentMethod": "cod",
+      "paymentStatus": "cod_due",
+      "paymentRef": null,
+      "paidAt": null,
+      "cancelled": null,
+      "notResponding": null,
+      "status": "confirmed",
+      "confirmedAt": "2026-11-25T10:32:39.914Z",
+      "confirmedBy": "legacy",
+      "deliveryGst": 0,
+      "cancellation": null
     },
     {
       "id": "CW1003",
@@ -59,7 +95,25 @@
       ],
       "subtotal": 299,
       "deliveryFee": 30,
-      "total": 329
+      "total": 329,
+      "startedAt": "2026-11-25T10:32:39.914Z",
+      "gst": {
+        "cgst": 0,
+        "sgst": 0,
+        "total": 0
+      },
+      "gstRate": 0,
+      "paymentMethod": "cod",
+      "paymentStatus": "paid",
+      "paymentRef": null,
+      "paidAt": null,
+      "cancelled": null,
+      "notResponding": null,
+      "status": "confirmed",
+      "confirmedAt": "2026-11-25T10:32:39.914Z",
+      "confirmedBy": "legacy",
+      "deliveryGst": 0,
+      "cancellation": null
     },
     {
       "id": "CW1004",
@@ -91,7 +145,25 @@
       ],
       "subtotal": 757,
       "deliveryFee": 0,
-      "total": 757
+      "total": 757,
+      "startedAt": "2026-11-25T12:24:40.746Z",
+      "gst": {
+        "cgst": 0,
+        "sgst": 0,
+        "total": 0
+      },
+      "gstRate": 0,
+      "paymentMethod": "cod",
+      "paymentStatus": "cod_due",
+      "paymentRef": null,
+      "paidAt": null,
+      "cancelled": null,
+      "notResponding": null,
+      "status": "confirmed",
+      "confirmedAt": "2026-11-25T12:24:40.746Z",
+      "confirmedBy": "legacy",
+      "deliveryGst": 0,
+      "cancellation": null
     },
     {
       "id": "CW1005",
@@ -117,7 +189,25 @@
       ],
       "subtotal": 488,
       "deliveryFee": 30,
-      "total": 518
+      "total": 518,
+      "startedAt": "2026-11-25T15:14:44.217Z",
+      "gst": {
+        "cgst": 0,
+        "sgst": 0,
+        "total": 0
+      },
+      "gstRate": 0,
+      "paymentMethod": "cod",
+      "paymentStatus": "cod_due",
+      "paymentRef": null,
+      "paidAt": null,
+      "cancelled": null,
+      "notResponding": null,
+      "status": "confirmed",
+      "confirmedAt": "2026-11-25T15:14:44.217Z",
+      "confirmedBy": "legacy",
+      "deliveryGst": 0,
+      "cancellation": null
     },
     {
       "id": "CW1006",
@@ -149,8 +239,783 @@
       ],
       "subtotal": 737,
       "deliveryFee": 0,
-      "total": 737
+      "total": 737,
+      "startedAt": "2026-11-25T15:46:35.333Z",
+      "gst": {
+        "cgst": 0,
+        "sgst": 0,
+        "total": 0
+      },
+      "gstRate": 0,
+      "paymentMethod": "cod",
+      "paymentStatus": "cod_due",
+      "paymentRef": null,
+      "paidAt": null,
+      "cancelled": null,
+      "notResponding": null,
+      "status": "confirmed",
+      "confirmedAt": "2026-11-25T15:46:35.333Z",
+      "confirmedBy": "legacy",
+      "deliveryGst": 0,
+      "cancellation": null
+    },
+    {
+      "id": "CW1007",
+      "createdAt": "2026-11-26T06:38:27.803Z",
+      "manualStep": null,
+      "name": "swetha",
+      "phone": "36434664364",
+      "address": "chhdutddyfkjhkjn",
+      "note": "very nice",
+      "items": [
+        {
+          "id": "berry-maple",
+          "name": "Berry Maple Stack",
+          "price": 259,
+          "qty": 1
+        },
+        {
+          "id": "rainbow-choco",
+          "name": "Rainbow Choco Crunch",
+          "price": 229,
+          "qty": 1
+        }
+      ],
+      "subtotal": 488,
+      "deliveryFee": 30,
+      "total": 518,
+      "startedAt": "2026-11-26T06:38:27.803Z",
+      "gst": {
+        "cgst": 0,
+        "sgst": 0,
+        "total": 0
+      },
+      "gstRate": 0,
+      "paymentMethod": "cod",
+      "paymentStatus": "cod_due",
+      "paymentRef": null,
+      "paidAt": null,
+      "cancelled": null,
+      "notResponding": null,
+      "status": "confirmed",
+      "confirmedAt": "2026-11-26T06:38:27.803Z",
+      "confirmedBy": "legacy",
+      "deliveryGst": 0,
+      "cancellation": null
+    },
+    {
+      "id": "CW1008",
+      "createdAt": "2026-11-26T06:56:55.018Z",
+      "startedAt": "2026-11-26T06:56:55.018Z",
+      "manualStep": null,
+      "name": "sanju",
+      "phone": "5765612636",
+      "address": "sai ram residency",
+      "note": "good",
+      "items": [
+        {
+          "id": "butter-berry",
+          "name": "Butter & Berry Classic",
+          "price": 249,
+          "qty": 1
+        },
+        {
+          "id": "choco-almond",
+          "name": "Choco Almond Melt",
+          "price": 279,
+          "qty": 1
+        },
+        {
+          "id": "choco-chip",
+          "name": "Choco Chip Whip",
+          "price": 239,
+          "qty": 1
+        },
+        {
+          "id": "fudge-stack",
+          "name": "Fudge Stack",
+          "price": 299,
+          "qty": 1
+        }
+      ],
+      "subtotal": 1066,
+      "gst": {
+        "cgst": 0,
+        "sgst": 0,
+        "total": 0
+      },
+      "gstRate": 5,
+      "deliveryFee": 0,
+      "total": 1119.3,
+      "paymentMethod": "cod",
+      "paymentStatus": "cod_due",
+      "paymentRef": null,
+      "paidAt": null,
+      "cancelled": {
+        "at": "2026-11-26T06:58:10.839Z",
+        "by": "customer",
+        "reason": "Ordered by mistake",
+        "refundStatus": "No payment was taken."
+      },
+      "notResponding": null,
+      "status": "confirmed",
+      "confirmedAt": "2026-11-26T06:56:55.018Z",
+      "confirmedBy": "legacy",
+      "deliveryGst": 0,
+      "cancellation": null
+    },
+    {
+      "id": "CW1009",
+      "createdAt": "2026-11-26T07:15:19.500Z",
+      "startedAt": null,
+      "manualStep": null,
+      "name": "Karthika Nair",
+      "phone": "56577675656",
+      "address": "4RCX+C3W\nBhestan-Jiav Rd\nBhestan",
+      "note": "good",
+      "items": [
+        {
+          "id": "berry-maple",
+          "name": "Berry Maple Stack",
+          "price": 259,
+          "qty": 1
+        },
+        {
+          "id": "rainbow-choco",
+          "name": "Rainbow Choco Crunch",
+          "price": 229,
+          "qty": 1
+        }
+      ],
+      "subtotal": 488,
+      "gst": {
+        "cgst": 0,
+        "sgst": 0,
+        "total": 0
+      },
+      "gstRate": 5,
+      "deliveryFee": 30,
+      "total": 542.4,
+      "paymentMethod": "cod",
+      "paymentStatus": "cod_due",
+      "paymentRef": null,
+      "paidAt": null,
+      "cancelled": {
+        "at": "2026-11-26T07:30:47.783Z",
+        "by": "system",
+        "reason": "Payment was not received within 15 minutes.",
+        "refundStatus": "No payment was received."
+      },
+      "notResponding": null,
+      "status": "confirmed",
+      "confirmedAt": "2026-11-26T07:15:19.500Z",
+      "confirmedBy": "legacy",
+      "deliveryGst": 0,
+      "cancellation": null
+    },
+    {
+      "id": "CW1010",
+      "createdAt": "2026-11-26T07:16:34.243Z",
+      "startedAt": "2026-11-26T07:16:34.243Z",
+      "manualStep": null,
+      "name": "Karthika Nair",
+      "phone": "56577675656",
+      "address": "4RCX+C3W\nBhestan-Jiav Rd\nBhestan",
+      "note": "good",
+      "items": [
+        {
+          "id": "berry-maple",
+          "name": "Berry Maple Stack",
+          "price": 259,
+          "qty": 1
+        },
+        {
+          "id": "rainbow-choco",
+          "name": "Rainbow Choco Crunch",
+          "price": 229,
+          "qty": 1
+        },
+        {
+          "id": "butter-berry",
+          "name": "Butter & Berry Classic",
+          "price": 249,
+          "qty": 1
+        }
+      ],
+      "subtotal": 737,
+      "gst": {
+        "cgst": 0,
+        "sgst": 0,
+        "total": 0
+      },
+      "gstRate": 5,
+      "deliveryFee": 0,
+      "total": 773.85,
+      "paymentMethod": "cod",
+      "paymentStatus": "cod_due",
+      "paymentRef": null,
+      "paidAt": null,
+      "cancelled": {
+        "at": "2026-11-26T07:16:47.984Z",
+        "by": "customer",
+        "reason": "Ordered by mistake",
+        "refundStatus": "No payment was taken."
+      },
+      "notResponding": null,
+      "status": "confirmed",
+      "confirmedAt": "2026-11-26T07:16:34.243Z",
+      "confirmedBy": "legacy",
+      "deliveryGst": 0,
+      "cancellation": null
+    },
+    {
+      "id": "CW1011",
+      "createdAt": "2026-11-26T07:37:30.240Z",
+      "startedAt": "2026-11-26T07:37:30.240Z",
+      "manualStep": null,
+      "name": "Karthika Nair",
+      "phone": "56577675656",
+      "address": "4RCX+C3W\nBhestan-Jiav Rd\nBhestan",
+      "note": "good",
+      "items": [
+        {
+          "id": "choco-almond",
+          "name": "Choco Almond Melt",
+          "price": 279,
+          "qty": 1
+        },
+        {
+          "id": "fudge-stack",
+          "name": "Fudge Stack",
+          "price": 299,
+          "qty": 1
+        }
+      ],
+      "subtotal": 578,
+      "gst": {
+        "cgst": 0,
+        "sgst": 0,
+        "total": 0
+      },
+      "gstRate": 5,
+      "deliveryFee": 0,
+      "total": 606.9,
+      "paymentMethod": "cod",
+      "paymentStatus": "cod_due",
+      "paymentRef": null,
+      "paidAt": null,
+      "cancelled": null,
+      "notResponding": null,
+      "status": "confirmed",
+      "confirmedAt": "2026-11-26T07:37:30.240Z",
+      "confirmedBy": "legacy",
+      "deliveryGst": 0,
+      "cancellation": null
+    },
+    {
+      "id": "CW1012",
+      "createdAt": "2026-11-26T08:25:00.078Z",
+      "startedAt": "2026-11-26T08:25:00.078Z",
+      "manualStep": null,
+      "name": "Karthika Nair",
+      "phone": "56577675656",
+      "address": "4RCX+C3W\nBhestan-Jiav Rd\nBhestan",
+      "note": "good",
+      "items": [
+        {
+          "id": "rainbow-choco",
+          "name": "Rainbow Choco Crunch",
+          "price": 229,
+          "qty": 1
+        },
+        {
+          "id": "berry-maple",
+          "name": "Berry Maple Stack",
+          "price": 259,
+          "qty": 1
+        },
+        {
+          "id": "butter-berry",
+          "name": "Butter & Berry Classic",
+          "price": 249,
+          "qty": 1
+        }
+      ],
+      "subtotal": 737,
+      "gst": {
+        "cgst": 0,
+        "sgst": 0,
+        "total": 0
+      },
+      "gstRate": 5,
+      "deliveryFee": 0,
+      "total": 773.85,
+      "paymentMethod": "cod",
+      "paymentStatus": "cod_due",
+      "paymentRef": null,
+      "paidAt": null,
+      "cancelled": {
+        "at": "2026-11-26T08:26:22.127Z",
+        "by": "customer",
+        "reason": "Ordered by mistake",
+        "refundStatus": "No payment was taken."
+      },
+      "notResponding": null,
+      "status": "confirmed",
+      "confirmedAt": "2026-11-26T08:25:00.078Z",
+      "confirmedBy": "legacy",
+      "deliveryGst": 0,
+      "cancellation": null
+    },
+    {
+      "id": "CW1013",
+      "createdAt": "2026-11-26T09:48:57.996Z",
+      "startedAt": "2026-11-26T09:48:57.996Z",
+      "manualStep": null,
+      "name": "Karthika Nair",
+      "phone": "56577675656",
+      "address": "4RCX+C3W\nBhestan-Jiav Rd\nBhestan",
+      "note": "good",
+      "items": [
+        {
+          "id": "berry-maple",
+          "name": "Berry Maple Stack",
+          "price": 259,
+          "qty": 1
+        },
+        {
+          "id": "rainbow-choco",
+          "name": "Rainbow Choco Crunch",
+          "price": 229,
+          "qty": 1
+        }
+      ],
+      "subtotal": 488,
+      "gst": {
+        "cgst": 0,
+        "sgst": 0,
+        "total": 0
+      },
+      "gstRate": 5,
+      "deliveryFee": 30,
+      "total": 542.4,
+      "paymentMethod": "cod",
+      "paymentStatus": "cod_due",
+      "paymentRef": null,
+      "paidAt": null,
+      "cancelled": null,
+      "notResponding": null,
+      "status": "confirmed",
+      "confirmedAt": "2026-11-26T09:48:57.996Z",
+      "confirmedBy": "legacy",
+      "deliveryGst": 0,
+      "cancellation": null
+    },
+    {
+      "id": "CW1014",
+      "createdAt": "2026-11-26T10:31:04.800Z",
+      "startedAt": "2026-11-26T10:31:04.800Z",
+      "manualStep": null,
+      "name": "Karthika Nair",
+      "phone": "56577675656",
+      "address": "4RCX+C3W\nBhestan-Jiav Rd\nBhestan",
+      "note": "good",
+      "items": [
+        {
+          "id": "choco-almond",
+          "name": "Choco Almond Melt",
+          "price": 279,
+          "qty": 1
+        },
+        {
+          "id": "fudge-stack",
+          "name": "Fudge Stack",
+          "price": 299,
+          "qty": 1
+        },
+        {
+          "id": "choco-chip",
+          "name": "Choco Chip Whip",
+          "price": 239,
+          "qty": 1
+        },
+        {
+          "id": "berry-maple",
+          "name": "Berry Maple Stack",
+          "price": 259,
+          "qty": 1
+        }
+      ],
+      "subtotal": 1076,
+      "gst": {
+        "cgst": 0,
+        "sgst": 0,
+        "total": 0
+      },
+      "gstRate": 5,
+      "deliveryFee": 0,
+      "total": 1129.8,
+      "paymentMethod": "cod",
+      "paymentStatus": "cod_due",
+      "paymentRef": null,
+      "paidAt": null,
+      "cancelled": {
+        "at": "2026-11-26T10:31:55.418Z",
+        "by": "customer",
+        "reason": "Ordered by mistake",
+        "refundStatus": "No payment was taken."
+      },
+      "notResponding": null,
+      "status": "confirmed",
+      "confirmedAt": "2026-11-26T10:31:04.800Z",
+      "confirmedBy": "legacy",
+      "deliveryGst": 0,
+      "cancellation": null
+    },
+    {
+      "id": "CW1015",
+      "createdAt": "2026-11-26T10:33:20.305Z",
+      "startedAt": "2026-11-26T10:33:20.305Z",
+      "manualStep": null,
+      "name": "Karthika Nair",
+      "phone": "56577675656",
+      "address": "4RCX+C3W\nBhestan-Jiav Rd\nBhestan",
+      "note": "",
+      "items": [
+        {
+          "id": "butter-berry",
+          "name": "Butter & Berry Classic",
+          "price": 249,
+          "qty": 6
+        }
+      ],
+      "subtotal": 1494,
+      "gst": {
+        "cgst": 0,
+        "sgst": 0,
+        "total": 0
+      },
+      "gstRate": 5,
+      "deliveryFee": 0,
+      "total": 1568.7,
+      "paymentMethod": "cod",
+      "paymentStatus": "cod_due",
+      "paymentRef": null,
+      "paidAt": null,
+      "cancelled": null,
+      "notResponding": null,
+      "status": "confirmed",
+      "confirmedAt": "2026-11-26T10:33:20.305Z",
+      "confirmedBy": "legacy",
+      "deliveryGst": 0,
+      "cancellation": null
+    },
+    {
+      "id": "CW1016",
+      "createdAt": "2026-11-26T10:45:36.130Z",
+      "manualStep": null,
+      "status": "confirmed",
+      "confirmBy": "2026-11-26T11:05:36.131Z",
+      "payBy": null,
+      "name": "Karthika Nair",
+      "phone": "56577675656",
+      "address": "4RCX+C3W\nBhestan-Jiav Rd\nBhestan",
+      "note": "good",
+      "paymentMethod": "cod",
+      "payApp": null,
+      "paymentStatus": "cod_due",
+      "items": [
+        {
+          "id": "rainbow-choco",
+          "name": "Rainbow Choco Crunch",
+          "price": 229,
+          "qty": 1,
+          "gstRate": 5
+        },
+        {
+          "id": "fudge-stack",
+          "name": "Fudge Stack",
+          "price": 299,
+          "qty": 1,
+          "gstRate": 5
+        },
+        {
+          "id": "choco-almond",
+          "name": "Choco Almond Melt",
+          "price": 279,
+          "qty": 1,
+          "gstRate": 5
+        },
+        {
+          "id": "butter-berry",
+          "name": "Butter & Berry Classic",
+          "price": 249,
+          "qty": 1,
+          "gstRate": 5
+        }
+      ],
+      "subtotal": 1056,
+      "deliveryFee": 0,
+      "deliveryGst": 0,
+      "gst": {
+        "cgst": 26.4,
+        "sgst": 26.4,
+        "total": 52.8
+      },
+      "total": 1108.8,
+      "cancellation": null,
+      "confirmedAt": "2026-11-26T10:45:46.898Z",
+      "confirmedBy": "customer"
+    },
+    {
+      "id": "CW1017",
+      "createdAt": "2026-11-26T10:47:52.878Z",
+      "manualStep": null,
+      "status": "confirmed",
+      "confirmBy": "2026-11-26T11:07:52.878Z",
+      "payBy": null,
+      "name": "Karthika Nair",
+      "phone": "56577675656",
+      "address": "4RCX+C3W\nBhestan-Jiav Rd\nBhestan",
+      "note": "good",
+      "paymentMethod": "cod",
+      "payApp": null,
+      "paymentStatus": "cod_due",
+      "items": [
+        {
+          "id": "rainbow-choco",
+          "name": "Rainbow Choco Crunch",
+          "price": 229,
+          "qty": 1,
+          "gstRate": 5
+        },
+        {
+          "id": "butter-berry",
+          "name": "Butter & Berry Classic",
+          "price": 249,
+          "qty": 1,
+          "gstRate": 5
+        },
+        {
+          "id": "berry-maple",
+          "name": "Berry Maple Stack",
+          "price": 259,
+          "qty": 1,
+          "gstRate": 5
+        }
+      ],
+      "subtotal": 737,
+      "deliveryFee": 0,
+      "deliveryGst": 0,
+      "gst": {
+        "cgst": 18.43,
+        "sgst": 18.42,
+        "total": 36.85
+      },
+      "total": 773.85,
+      "cancellation": null,
+      "confirmedAt": "2026-11-26T10:47:54.500Z",
+      "confirmedBy": "customer"
+    },
+    {
+      "id": "CW1018",
+      "createdAt": "2026-11-27T04:53:50.735Z",
+      "manualStep": null,
+      "status": "confirmed",
+      "confirmBy": "2026-11-27T05:13:50.736Z",
+      "payBy": null,
+      "name": "karthika",
+      "phone": "9940105761",
+      "address": "2c/101 sai palace",
+      "note": "good",
+      "paymentMethod": "cod",
+      "payApp": null,
+      "paymentStatus": "cod_due",
+      "items": [
+        {
+          "id": "rainbow-choco",
+          "name": "Rainbow Choco Crunch",
+          "price": 229,
+          "qty": 1,
+          "gstRate": 5
+        },
+        {
+          "id": "berry-maple",
+          "name": "Berry Maple Stack",
+          "price": 259,
+          "qty": 1,
+          "gstRate": 5
+        }
+      ],
+      "subtotal": 488,
+      "deliveryFee": 30,
+      "deliveryGst": 5.4,
+      "gst": {
+        "cgst": 14.9,
+        "sgst": 14.9,
+        "total": 29.8
+      },
+      "total": 547.8,
+      "cancellation": null,
+      "confirmedAt": "2026-11-27T04:53:54.227Z",
+      "confirmedBy": "customer"
+    },
+    {
+      "id": "CW1019",
+      "createdAt": "2026-11-27T05:38:33.024Z",
+      "manualStep": null,
+      "status": "confirmed",
+      "confirmBy": "2026-11-27T05:58:33.024Z",
+      "payBy": null,
+      "name": "Karthika Nair",
+      "phone": "56577675656",
+      "address": "4RCX+C3W\nBhestan-Jiav Rd\nBhestan",
+      "note": "good",
+      "paymentMethod": "cod",
+      "payApp": null,
+      "paymentStatus": "cod_due",
+      "items": [
+        {
+          "id": "rainbow-choco",
+          "name": "Rainbow Choco Crunch",
+          "price": 229,
+          "qty": 1,
+          "gstRate": 5
+        },
+        {
+          "id": "butter-berry",
+          "name": "Butter & Berry Classic",
+          "price": 249,
+          "qty": 1,
+          "gstRate": 5
+        }
+      ],
+      "subtotal": 478,
+      "deliveryFee": 30,
+      "deliveryGst": 5.4,
+      "gst": {
+        "cgst": 14.65,
+        "sgst": 14.65,
+        "total": 29.3
+      },
+      "total": 537.3,
+      "cancellation": null,
+      "confirmedAt": "2026-11-27T05:38:34.615Z",
+      "confirmedBy": "customer"
     }
   ],
-  "messages": []
+  "messages": [
+    {
+      "id": "mwyikziv",
+      "createdAt": "2026-11-27T05:01:47.095Z",
+      "name": "Karthika Nair",
+      "phone": "9940105761",
+      "message": "the waffle was very nive and it is very best"
+    }
+  ],
+  "customers": [
+    {
+      "phone": "5765612636",
+      "name": "sanju",
+      "addresses": [
+        "sai ram residency"
+      ],
+      "orderCount": 1,
+      "cancelCount": 1,
+      "messageCount": 0,
+      "noResponseCount": 0,
+      "firstSeen": "2026-11-26T06:56:55.018Z",
+      "lastSeen": "2026-11-26T06:56:55.018Z"
+    },
+    {
+      "phone": "6577675656",
+      "name": "Karthika Nair",
+      "addresses": [
+        "4RCX+C3W\nBhestan-Jiav Rd\nBhestan"
+      ],
+      "orderCount": 7,
+      "cancelCount": 3,
+      "messageCount": 0,
+      "noResponseCount": 0,
+      "firstSeen": "2026-11-26T07:15:19.501Z",
+      "lastSeen": "2026-11-26T10:33:20.305Z",
+      "lastOrderAt": "2026-11-27T05:38:33.024Z"
+    },
+    {
+      "phone": "9876543210",
+      "name": "Demo customer",
+      "addresses": [
+        "Demo address, Surat"
+      ],
+      "createdAt": "2026-11-26T10:44:20.974Z",
+      "noResponseCount": 0,
+      "cancelledCount": 0,
+      "lastOrderAt": "2026-11-26T10:44:20.974Z"
+    },
+    {
+      "phone": "6434664364",
+      "name": "swetha",
+      "addresses": [
+        "chhdutddyfkjhkjn"
+      ],
+      "createdAt": "2026-11-26T10:44:20.975Z",
+      "noResponseCount": 0,
+      "cancelledCount": 0,
+      "lastOrderAt": "2026-11-26T10:44:20.975Z"
+    },
+    {
+      "phone": "9940105761",
+      "name": "karthika",
+      "addresses": [
+        "2c/101 sai palace"
+      ],
+      "createdAt": "2026-11-27T04:53:50.736Z",
+      "noResponseCount": 0,
+      "cancelledCount": 0,
+      "lastOrderAt": "2026-11-27T04:53:50.736Z"
+    }
+  ],
+  "payments": [
+    {
+      "id": "PLmwxffabnp1s1",
+      "at": "2026-11-26T10:45:36.131Z",
+      "orderId": "CW1016",
+      "event": "cod_selected",
+      "method": "cod",
+      "app": null,
+      "amount": 1108.8,
+      "status": "cod_due"
+    },
+    {
+      "id": "PLmwxfi7u6u0up",
+      "at": "2026-11-26T10:47:52.878Z",
+      "orderId": "CW1017",
+      "event": "cod_selected",
+      "method": "cod",
+      "app": null,
+      "amount": 773.85,
+      "status": "cod_due"
+    },
+    {
+      "id": "PLmwyiaryoj9ja",
+      "at": "2026-11-27T04:53:50.736Z",
+      "orderId": "CW1018",
+      "event": "cod_selected",
+      "method": "cod",
+      "app": null,
+      "amount": 547.8,
+      "status": "cod_due"
+    },
+    {
+      "id": "PLmwyjw9mou1qs",
+      "at": "2026-11-27T05:38:33.024Z",
+      "orderId": "CW1019",
+      "event": "cod_selected",
+      "method": "cod",
+      "app": null,
+      "amount": 537.3,
+      "status": "cod_due"
+    }
+  ],
+  "ratings": []
 }

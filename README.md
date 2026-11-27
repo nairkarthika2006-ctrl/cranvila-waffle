@@ -44,3 +44,29 @@ curl -H "x-admin-key: your-secret" http://localhost:5000/api/admin/orders
 - Menu items and prices: `backend/menuData.js` (the copy in `frontend/src/data.js` is only an offline fallback).
 - Testimonials, statistics and FAQ on the home page are sample text in `frontend/src/pages/Home.jsx`. Replace them with real ones.
 - The checkout is pay on delivery. Online payments (Razorpay, Stripe) are not included.
+
+---
+
+## New: GST, payments, cancellation, customer records
+
+**GST.** Menu prices are before tax. Items carry 5% (change `ITEM_GST` or set `gst` on one item in `backend/menuData.js`), delivery 18% (`DELIVERY_GST`). Shown as CGST + SGST (Gujarat, within state). The server calculates the bill in `backend/pricing.js`; the page only previews it. Please confirm the rates with your CA.
+
+**Payments.** Cash on delivery, Google Pay, PhonePe and other UPI apps. Online payments go through Razorpay, which opens the UPI apps. To go live, create a Razorpay account and put `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET` in `backend/.env.example`'s variables (webhook URL: `/api/payments/webhook`). With no keys the site runs in **demo mode** (simulated payment, no real money; disabled when `NODE_ENV=production`). Every payment event is saved in the payment log.
+
+**Cancellation.** Customers cancel on the Order tracking page until the rider leaves, with two confirmations (the server enforces both) and the phone number used for the order. Paid orders get an automatic refund through Razorpay. Policy page: `/#/cancellation-policy`.
+
+**Not responding.** A COD order stays "pending confirmation"; if the customer does not tap Confirm within `CONFIRM_MINUTES` (20) it is cancelled automatically. Online orders not paid within `PAY_MINUTES` (15) are cancelled. After `NO_RESPONSE_LIMIT` (2) no-response cancellations, that phone number cannot use COD. If you call a customer and they do not answer, mark it with the admin action below.
+
+**Customer records.** Every order saves name, phone, addresses, orders, cancellations and no-response count in `backend/data/db.json`.
+
+New admin calls (header `x-admin-key`):
+```
+GET   /api/admin/customers                 customers with order count, total spent, cancellations
+GET   /api/admin/payments[?orderId=CW1005] payment log
+PATCH /api/admin/orders/CW1005  {"action":"confirm"}        you called and they confirmed
+PATCH /api/admin/orders/CW1005  {"action":"no_response"}    customer did not answer: cancel
+PATCH /api/admin/orders/CW1005  {"action":"cancel","reason":"Out of stock"}
+PATCH /api/admin/orders/CW1005  {"action":"cod_collected"}  cash received
+```
+
+**Contact map.** Google Maps embed plus a directions button. Set your real address in `frontend/src/data.js` (`ADDRESS`, `MAP_QUERY`).

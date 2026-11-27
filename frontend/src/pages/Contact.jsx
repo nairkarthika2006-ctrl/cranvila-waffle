@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { api } from '../api.js'
-import { PHONE, PHONE_LINK, EMAIL } from '../data.js'
+import { PHONE, PHONE_LINK, EMAIL, ADDRESS, MAP_QUERY } from '../data.js'
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', phone: '', message: '' })
@@ -35,7 +35,7 @@ export default function Contact() {
             <a className="bigcall" href={PHONE_LINK}>{PHONE}</a>
             <p>Daily 11 am to 11 pm</p>
             <h3>Visit</h3>
-            <p>12 Waffle Lane, Adajan<br />Surat, Gujarat 395009</p>
+            <p>{ADDRESS[0]}<br />{ADDRESS[1]}</p>
             <h3>Email</h3>
             <p><a href={`mailto:${EMAIL}`}>{EMAIL}</a></p>
           </div>
@@ -54,6 +54,20 @@ export default function Contact() {
             <button className="btn gold" type="submit" disabled={busy}>{busy ? 'Sending...' : 'Send message'}</button>
             {sent && <p className="ok" role="status">Thanks, your message was sent. We will call you shortly.</p>}
           </form>
+        </div>
+        <div className="wrap mapwrap">
+          <iframe
+            className="map"
+            title="Cranvila Waffle on Google Maps"
+            src={`https://www.google.com/maps?q=${encodeURIComponent(MAP_QUERY)}&output=embed`}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            allowFullScreen
+          />
+          <div className="btns">
+            <a className="btn gold sm" href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(MAP_QUERY)}`} target="_blank" rel="noreferrer">Get directions</a>
+            <a className="btn outline sm" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(MAP_QUERY)}`} target="_blank" rel="noreferrer">Open in Google Maps</a>
+          </div>
         </div>
       </section>
     </>

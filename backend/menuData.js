@@ -1,6 +1,10 @@
 // Single source of truth for prices. The server always recalculates totals from this list.
 export const DELIVERY_FEE = 30
 export const FREE_DELIVERY_ABOVE = 499
+// GST: food items 5% by default (set `gst` on an item to override). Delivery charge 18%.
+// Confirm the correct rates for your business with your CA.
+export const ITEM_GST = 5
+export const DELIVERY_GST = 18
 
 export const menu = [
   { id: 'berry-maple', name: 'Berry Maple Stack', desc: 'Crisp waffles with strawberries, blueberries, raspberries and warm maple syrup.', price: 259, cat: 'fruit', photo: 'berry-maple.jpg' },
@@ -12,3 +16,4 @@ export const menu = [
   { id: 'caramel-crown', name: 'Caramel Crown', desc: 'Vanilla ice cream, chocolate and caramel sauce, crushed nuts and fresh mint.', price: 319, cat: 'icecream', photo: 'caramel-crown.jpg' },
   { id: 'cocoa-strawberry', name: 'Cocoa Strawberry Cream', desc: 'Cocoa waffles with fresh strawberries and a spoon of vanilla cream.', price: 259, cat: 'fruit', photo: 'cocoa-strawberry.jpg', pos: 'center 75%' },
 ]
+.map((i) => ({ gst: ITEM_GST, ...i }))

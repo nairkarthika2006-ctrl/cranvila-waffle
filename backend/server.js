@@ -7,13 +7,17 @@ import menuRoutes from './routes/menu.js'
 import orderRoutes from './routes/orders.js'
 import contactRoutes from './routes/contact.js'
 import adminRoutes from './routes/admin.js'
+import paymentRoutes, { webhook } from './routes/payments.js'
+import { sweep } from './orderLogic.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const app = express()
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 6000
 
 const origins = (process.env.CORS_ORIGIN || '').split(',').map((s) => s.trim()).filter(Boolean)
 app.use(cors({ origin: origins.length ? origins : true }))
+// The webhook needs the raw body to check Razorpay's signature, so it is registered before express.json().
+app.post('/api/payments/webhook', express.raw({ type: '*/*', limit: '100kb' }), webhook)
 app.use(express.json({ limit: '50kb' }))
 
 // Very small in-memory rate limiter for write endpoints (per IP).
@@ -31,6 +35,7 @@ const writeLimit = (req, res, next) => (req.method === 'POST' ? limit(15, 60_000
 app.get('/api/health', (req, res) => res.json({ ok: true }))
 app.use('/api/menu', menuRoutes)
 app.use('/api/orders', writeLimit, orderRoutes)
+app.use('/api/payments', writeLimit, paymentRoutes)
 app.use('/api/contact', writeLimit, contactRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api', (req, res) => res.status(404).json({ error: 'Not found' }))
@@ -46,6 +51,9 @@ app.use((err, req, res, next) => {
   console.error(err)
   res.status(400).json({ error: 'Invalid request.' })
 })
+
+setInterval(sweep, 60_000) // auto-cancel unconfirmed / unpaid orders
+sweep()
 
 app.listen(PORT, () => {
   console.log(`Cranvila Waffle API running on http://localhost:${PORT}`)
