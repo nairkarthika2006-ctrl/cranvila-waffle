@@ -34,7 +34,12 @@ export function cancelOrder(o, by, reason, { noResponse = false, confirmations =
 }
 
 export async function markPaid(o, paymentId, source) {
-  if (o.paymentStatus === 'paid' || o.paymentStatus === 'refund_pending' || o.paymentStatus === 'refunded') return
+  if (o.paymentStatus === 'paid' || o.paymentStatus === 'refund_pending' || o.paymentStatus === 'refunded' || o._marking) return
+  o._marking = true // the checkout callback and the webhook usually arrive together; only the first one may proceed
+  try { await finishPaid(o, paymentId, source) } finally { delete o._marking }
+}
+
+async function finishPaid(o, paymentId, source) {
   let detail = {}
   if (rzp.live) { try { const p = await rzp.fetchPayment(paymentId); detail = { method: p.method, vpa: p.vpa || null, bank: p.bank || null, wallet: p.wallet || null } } catch { /* log below without detail */ } }
   o.paymentStatus = 'paid'; o.providerPaymentId = paymentId; o.paidAt = new Date().toISOString()

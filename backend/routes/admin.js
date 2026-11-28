@@ -1,13 +1,16 @@
+import crypto from 'crypto'
 import { Router } from 'express'
 import { getDb, save, logPayment, normPhone } from '../store.js'
 import { adminView, stepOf } from './orders.js'
 import { cancelOrder, sweep } from '../orderLogic.js'
 
 const r = Router()
-const KEY = process.env.ADMIN_KEY || 'change-me'
+const KEY = process.env.ADMIN_KEY || (process.env.NODE_ENV === 'production' ? '' : 'change-me')
+const same = (a, b) => { const x = Buffer.from(String(a)), y = Buffer.from(String(b)); return x.length === y.length && crypto.timingSafeEqual(x, y) }
 
 r.use((req, res, next) => {
-  if (req.get('x-admin-key') !== KEY) return res.status(401).json({ error: 'Unauthorized' })
+  if (!KEY) return res.status(503).json({ error: 'Admin is disabled: set ADMIN_KEY on the server.' })
+  if (!same(req.get('x-admin-key') || '', KEY)) return res.status(401).json({ error: 'Unauthorized' })
   sweep()
   next()
 })

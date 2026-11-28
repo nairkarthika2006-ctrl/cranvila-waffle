@@ -53,7 +53,7 @@ r.post('/event', (req, res) => {
 
 // Demo mode only (no Razorpay keys, not production): lets you test the whole flow without real money.
 r.post('/demo', async (req, res) => {
-  if (rzp.live || process.env.NODE_ENV === 'production') return res.status(404).json({ error: 'Not found' })
+  if (rzp.live || (process.env.NODE_ENV === 'production' && process.env.ALLOW_DEMO_PAYMENTS !== 'true')) return res.status(404).json({ error: 'Not found' })
   const o = own(req, res); if (!o) return
   if (req.body.outcome === 'success') { await markPaid(o, `demo_${Date.now().toString(36)}`, 'demo'); return res.json(publicView(o)) }
   o.paymentStatus = 'failed'

@@ -3,7 +3,8 @@ import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
-const dir = path.join(path.dirname(fileURLToPath(import.meta.url)), 'data')
+// On Render, point DATA_DIR at a Persistent Disk mount (e.g. /var/data). Otherwise db.json is wiped on every deploy/restart.
+const dir = process.env.DATA_DIR || path.join(path.dirname(fileURLToPath(import.meta.url)), 'data')
 const FILE = path.join(dir, 'db.json')
 
 function seed() {
@@ -26,7 +27,14 @@ function seed() {
 export const normPhone = (p) => String(p || '').replace(/\D/g, '').slice(-10)
 
 let db
-try { db = JSON.parse(fs.readFileSync(FILE, 'utf8')) } catch { db = seed() }
+try { db = JSON.parse(fs.readFileSync(FILE, 'utf8')) } catch (e) {
+  if (e.code !== 'ENOENT') { // file exists but is unreadable/corrupt: keep a copy instead of silently overwriting real orders
+    try { fs.copyFileSync(FILE, `${FILE}.corrupt-${Date.now()}`) } catch { /* ignore */ }
+    console.error('db.json could not be read, starting from the demo seed:', e.message)
+  }
+  db = seed()
+}
+db.orders ||= []; db.nextOrder ||= 1004
 
 // Upgrade older data files (and the demo seed) to the current shape.
 db.customers ||= []; db.payments ||= []; db.ratings ||= []; db.messages ||= []
@@ -43,7 +51,7 @@ save()
 
 export function save() {
   fs.mkdirSync(dir, { recursive: true })
-  fs.writeFileSync(FILE + '.tmp', JSON.stringify(db, null, 2))
+  fs.writeFileSync(FILE + '.tmp', JSON.stringify(db, (k, v) => (k === '_marking' ? undefined : v), 2))
   fs.renameSync(FILE + '.tmp', FILE)
 }
 export const getDb = () => db
