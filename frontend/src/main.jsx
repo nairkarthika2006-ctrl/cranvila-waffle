@@ -4,13 +4,16 @@ import { HashRouter } from 'react-router-dom'
 import App from './App.jsx'
 import { StoreProvider } from './context/Store.jsx'
 import './index.css'
+import { I18nProvider } from './context/I18n.jsx'
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <HashRouter>
-      <StoreProvider>
-        <App />
-      </StoreProvider>
+      <I18nProvider>
+        <StoreProvider>
+          <App />
+        </StoreProvider>
+      </I18nProvider>
     </HashRouter>
   </React.StrictMode>
 )

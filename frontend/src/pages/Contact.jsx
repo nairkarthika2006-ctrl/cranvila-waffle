@@ -3,7 +3,7 @@ import { api } from '../api.js'
 import { PHONE, PHONE_LINK, EMAIL, ADDRESS, MAP_QUERY } from '../data.js'
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: '', phone: '', message: '' })
+  const [form, setForm] = useState({ name: '', phone: '', message: '', enquiryType: 'general', eventDate: '', guests: '' })
   const [errors, setErrors] = useState({})
   const [formError, setFormError] = useState('')
   const [busy, setBusy] = useState(false)
@@ -16,7 +16,7 @@ export default function Contact() {
     try {
       await api.contact(form)
       setSent(true)
-      setForm({ name: '', phone: '', message: '' })
+      setForm({ name: '', phone: '', message: '', enquiryType: 'general', eventDate: '', guests: '' })
     } catch (err) {
       setErrors(err.fields || {})
       setFormError(err.message)
@@ -50,6 +50,20 @@ export default function Contact() {
             <label htmlFor="m">Message</label>
             <textarea id="m" rows="4" value={form.message} onChange={set('message')} aria-invalid={!!errors.message} />
             {errors.message && <p className="ferr">{errors.message}</p>}
+            <label htmlFor="etype">Enquiry type</label>
+            <select id="etype" value={form.enquiryType} onChange={set('enquiryType')}>
+              <option value="general">General question</option>
+              <option value="bulk">Bulk / party order</option>
+              <option value="scheduled">Scheduled birthday or event</option>
+            </select>
+            {form.enquiryType !== 'general' && (
+              <>
+                <label htmlFor="edate">Event date</label>
+                <input id="edate" type="datetime-local" value={form.eventDate} onChange={set('eventDate')} />
+                <label htmlFor="eguests">Expected guests</label>
+                <input id="eguests" type="number" min="10" value={form.guests} onChange={set('guests')} placeholder="e.g. 40" />
+              </>
+            )}
             {formError && <p className="ferr" role="alert">{formError}</p>}
             <button className="btn gold" type="submit" disabled={busy}>{busy ? 'Sending...' : 'Send message'}</button>
             {sent && <p className="ok" role="status">Thanks, your message was sent. We will call you shortly.</p>}

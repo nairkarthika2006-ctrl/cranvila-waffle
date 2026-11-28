@@ -9,14 +9,16 @@ import Tracking from './pages/Tracking.jsx'
 import Contact from './pages/Contact.jsx'
 import Cart from './pages/Cart.jsx'
 import Policy from './pages/Policy.jsx'
+import Admin from './pages/Admin.jsx'
+import MenuItem from './pages/MenuItem.jsx'
 
-const titles = { '/': 'Home', '/about': 'About us', '/menu': 'Menu', '/tracking': 'Order tracking', '/contact': 'Contact', '/cart': 'Your order', '/cancellation-policy': 'Cancellation policy' }
+const titles = { '/': 'Home', '/about': 'About us', '/menu': 'Menu', '/tracking': 'Order tracking', '/contact': 'Contact', '/cart': 'Your order', '/cancellation-policy': 'Cancellation policy', '/admin': 'Staff dashboard' }
 
 export default function App() {
   const { pathname } = useLocation()
   useEffect(() => {
     window.scrollTo(0, 0)
-    document.title = `${titles[pathname] || 'Home'} | Cranvila Waffle`
+    document.title = `${pathname.startsWith('/menu/') ? 'Menu item' : titles[pathname] || 'Home'} | Cranvila Waffle`
   }, [pathname])
 
   return (
@@ -27,10 +29,12 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/menu" element={<Menu />} />
+          <Route path="/menu/:id" element={<MenuItem />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/tracking" element={<Tracking />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/cancellation-policy" element={<Policy />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<Home />} />
         </Routes>
       </main>

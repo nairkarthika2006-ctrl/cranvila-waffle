@@ -12,6 +12,7 @@ export const MAP_QUERY = 'Bhestan, Surat, Gujarat 394210'
 
 export const img = (name) => `${import.meta.env.BASE_URL}images/${name}`
 export const rupee = (n) => `₹${Number.isInteger(n) ? n : n.toFixed(2)}`
+export const money = (value) => rupee(typeof value === 'object' && value?.total != null ? value.total : value)
 
 // Fallback menu, used only if the backend cannot be reached. The backend list is the source of truth.
 export const items = [
@@ -22,7 +23,14 @@ export const items = [
   { id: 'fudge-stack', name: 'Fudge Stack', desc: 'Chocolate waffles layered with hot fudge sauce and a scoop of vanilla ice cream.', price: 299, cat: 'icecream', photo: 'fudge-stack.jpg', pos: 'center 55%' },
   { id: 'choco-chip', name: 'Choco Chip Whip', desc: 'Double-stacked waffles with chocolate chips, whipped cream and maple syrup.', price: 239, cat: 'chocolate', photo: 'choco-chip.jpg' },
   { id: 'caramel-crown', name: 'Caramel Crown', desc: 'Vanilla ice cream, chocolate and caramel sauce, crushed nuts and fresh mint.', price: 319, cat: 'icecream', photo: 'caramel-crown.jpg' },
-  { id: 'cocoa-strawberry', name: 'Cocoa Strawberry Cream', desc: 'Cocoa waffles with fresh strawberries and a spoon of vanilla cream.', price: 259, cat: 'fruit', photo: 'cocoa-strawberry.jpg', pos: 'center 75%' },
+  { id: 'iced-cocoa', name: 'Iced Chocolate Drink', desc: 'Chilled chocolate drink finished with a cloud of cream.', price: 149, cat: 'drinks', photo: 'iced-chocolate-drink.png', diet: 'veg', allergens: ['milk'], inStock: true },
+  { id: 'hot-cocoa', name: 'Marshmallow Hot Cocoa', desc: 'Rich hot chocolate topped with whipped cream and marshmallow.', price: 159, cat: 'drinks', photo: 'marshmallow-cocoa-latest.png', diet: 'veg', allergens: ['milk'], inStock: true },
+  { id: 'chocolate-shake', name: 'Chocolate Cream Shake', desc: 'Creamy chocolate shake topped with whipped cream and chocolate curls.', price: 189, cat: 'drinks', photo: 'chocolate-shake-latest.png', diet: 'veg', allergens: ['milk'], inStock: true },
+  { id: 'strawberry-chocolate-cups', name: 'Strawberry Chocolate Cooler', desc: 'Chocolate and fresh strawberry layered with cream.', price: 219, cat: 'drinks', photo: 'strawberry-chocolate-cooler.png', diet: 'veg', allergens: ['milk', 'strawberry'], inStock: true },
+  { id: 'chocolate-brownie', name: 'Chocolate Brownie', desc: 'Fudgy chocolate brownie finished with chocolate drizzle.', price: 179, cat: 'brownies', photo: 'brownie-drizzle.png', diet: 'egg', allergens: ['eggs', 'milk', 'wheat'], inStock: true },
+  { id: 'brownie-icecream', name: 'Brownie & Ice Cream', desc: 'Warm chocolate brownie served with a scoop of vanilla ice cream.', price: 229, cat: 'brownies', photo: 'brownie-icecream-latest.png', diet: 'egg', allergens: ['eggs', 'milk', 'wheat'], inStock: true },
+  { id: 'choc-chip-brownie', name: 'Chocolate Chip Brownie', desc: 'Dense chocolate brownie topped with chocolate chips.', price: 199, cat: 'brownies', photo: 'brownie-chip-latest.png', diet: 'egg', allergens: ['eggs', 'milk', 'wheat'], inStock: true },
+  { id: 'brownie-stack', name: 'Double Brownie Stack', desc: 'A rich stack of brownies finished with white and milk chocolate.', price: 249, cat: 'brownies', photo: 'brownie-stack-latest.png', diet: 'egg', allergens: ['eggs', 'milk', 'wheat'], inStock: true },
 ]
 
 export const filters = [
@@ -31,6 +39,8 @@ export const filters = [
   { key: 'fruit', label: 'Fruit' },
   { key: 'chocolate', label: 'Chocolate' },
   { key: 'icecream', label: 'Ice cream' },
+  { key: 'drinks', label: 'Drinks' },
+  { key: 'brownies', label: 'Brownies' },
 ]
 
 export const steps = ['Order placed', 'Preparing', 'Out for delivery', 'Delivered']

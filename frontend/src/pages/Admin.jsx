@@ -54,13 +54,12 @@ export default function Admin() {
           <article className="card ord" key={o.id}>
             <div className="rhead">
               <div><h3>{o.id} · {money(o.total)}</h3><p>{when(o.createdAt)} · {o.name} · <a href={`tel:${o.phone}`}>{o.phone}</a></p></div>
-              <span className={`eta${o.cancelled ? ' bad' : ''}`}>{o.status}</span>
+              <span className={`eta${o.cancellation ? ' bad' : ''}`}>{o.status}</span>
             </div>
-            <p>{o.address}{o.note ? ` · Note: ${o.note}` : ''}</p>
+            <p>{o.address || ''}{o.note ? ` · Note: ${o.note}` : ''}</p>
             <p className="muted">{o.items.map((l) => `${l.qty} × ${l.name}`).join(', ')} · GST {money(o.gst)}</p>
-            <p><b>{o.paymentMethod.toUpperCase()}</b> · {o.paymentStatus}{o.paymentRef ? ` · ID ${o.paymentRef}` : ''}{o.cancelled ? ` · Cancelled by ${o.cancelled.by}: ${o.cancelled.reason}` : ''}</p>
-            {o.notRespondingLog.length > 0 && <p className="muted">Calls not answered: {o.notRespondingLog.length}{o.notResponding ? `, auto-cancel at ${when(o.notResponding.deadline)}` : ' (customer responded)'}</p>}
-            {!o.cancelled && o.step < 3 && (
+            <p><b>{o.paymentMethod?.toUpperCase() || 'COD'}</b> · {o.paymentStatus}{o.providerPaymentId ? ` · ID ${o.providerPaymentId}` : ''}{o.cancellation ? ` · Cancelled by ${o.cancellation.by}: ${o.cancellation.reason}` : ''}</p>
+            {!o.cancellation && o.step < 3 && (
               <div className="btns left small">
                 <button className="btn outline sm" onClick={() => act(() => admin.step(key, o.id, 1))}>Preparing</button>
                 <button className="btn outline sm" onClick={() => act(() => admin.step(key, o.id, 2))}>Out for delivery</button>
@@ -72,13 +71,13 @@ export default function Admin() {
                 <button className="btn danger sm" onClick={() => { const r = prompt('Reason for cancelling?'); if (r) act(() => admin.cancel(key, o.id, r)) }}>Cancel order</button>
               </div>
             )}
-            {o.cancelled && o.paymentStatus === 'refund_pending' && <button className="btn gold sm" onClick={() => act(() => admin.payment(key, o.id, 'refunded'))}>Mark refund done</button>}
+            {o.cancellation && o.paymentStatus === 'refund_pending' && <button className="btn gold sm" onClick={() => act(() => admin.payment(key, o.id, 'refunded'))}>Mark refund done</button>}
           </article>
         ))}
 
         {tab === 'customers' && (
           <div className="card"><div className="tablewrap"><table><thead><tr><th>Name</th><th>Phone</th><th>Orders</th><th>Cancelled</th><th>Missed calls</th><th>Last seen</th><th>Address</th></tr></thead>
-            <tbody>{data.customers.map((c) => <tr key={c.phone}><td>{c.name}</td><td><a href={`tel:${c.phone}`}>{c.phone}</a></td><td>{c.orderCount}</td><td>{c.cancelCount}</td><td>{c.noResponseCount}</td><td>{when(c.lastSeen)}</td><td>{c.addresses[0] || ''}</td></tr>)}</tbody></table></div></div>
+            <tbody>{data.customers.map((c) => <tr key={c.phone}><td>{c.name}</td><td><a href={`tel:${c.phone}`}>{c.phone}</a></td><td>{c.orders ?? c.orderCount ?? 0}</td><td>{c.cancelled ?? c.cancelCount ?? 0}</td><td>{c.noResponseCount ?? 0}</td><td>{c.lastSeen ? when(c.lastSeen) : c.lastOrderAt ? when(c.lastOrderAt) : ''}</td><td>{c.addresses?.[0] || ''}</td></tr>)}</tbody></table></div></div>
         )}
 
         {tab === 'messages' && data.messages.map((m) => (

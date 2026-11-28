@@ -4,14 +4,19 @@ import { api } from '../api.js'
 import { steps, rupee, PAY_LABEL } from '../data.js'
 import OrderActions from '../components/OrderActions.jsx'
 import RateOrder from '../components/RateOrder.jsx'
+import { useStore } from '../context/Store.jsx'
 
 export default function Tracking() {
+  const { add } = useStore()
   const [params, setParams] = useSearchParams()
   const id = (params.get('id') || '').toUpperCase()
   const [value, setValue] = useState(id)
   const [order, setOrder] = useState(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [reorderPhone, setReorderPhone] = useState('')
+  const [pastOrders, setPastOrders] = useState([])
+  const [reorderError, setReorderError] = useState('')
 
   // Load the order whenever the ID in the address changes, then refresh every 15 s until delivered.
   useEffect(() => {
@@ -41,6 +46,12 @@ export default function Tracking() {
     const v = value.trim().toUpperCase()
     if (v) setParams({ id: v })
   }
+  const findPastOrders = async (e) => {
+    e.preventDefault()
+    setReorderError(''); setPastOrders([])
+    try { setPastOrders(await api.reorder(reorderPhone)) }
+    catch (err) { setReorderError(err.message) }
+  }
   const state = (i) => order.step < 0 ? '' : (order.step === 3 || i < order.step ? 'done' : i === order.step ? 'now' : '')
 
   return (
@@ -55,6 +66,21 @@ export default function Tracking() {
               <button className="btn gold" type="submit">Track order</button>
             </div>
             <p className="hint">Demo IDs to try: CW1001, CW1002, CW1003 (CW1003 is delivered, demo phone 9876543210)</p>
+          </form>
+          <form className="card" onSubmit={findPastOrders}>
+            <h3>Reorder a favourite</h3>
+            <label htmlFor="rphone">Phone number used for past orders</label>
+            <div className="inline">
+              <input id="rphone" type="tel" value={reorderPhone} onChange={(e) => setReorderPhone(e.target.value)} placeholder="10-digit phone number" />
+              <button className="btn outline" type="submit">Find orders</button>
+            </div>
+            {reorderError && <p className="err">{reorderError}</p>}
+            {pastOrders.map((old) => (
+              <div className="reorder-row" key={old.id}>
+                <div><b>{old.id}</b><span>{old.items.map((x) => `${x.qty} × ${x.name}`).join(', ')}</span></div>
+                <button type="button" className="btn gold sm" onClick={() => { old.items.forEach((x) => add(x.id, x.customizations || [])); setReorderPhone('') }}>Add again</button>
+              </div>
+            ))}
           </form>
 
           {loading && <p className="hint">Looking up your order...</p>}

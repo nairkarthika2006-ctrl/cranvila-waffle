@@ -15,8 +15,9 @@ const loadCheckout = () => new Promise((resolve, reject) => {
 })
 
 export default function Cart() {
-  const { lines, subtotal, deliveryFee, deliveryGst, gst, total, config, add, remove, drop, clear } = useStore()
-  const [form, setForm] = useState({ name: '', phone: '', address: '', note: '' })
+  const { lines, subtotal, discount, coupon, discountedSubtotal, deliveryFee, gst, total, config, add, remove, drop, clear, applyCoupon } = useStore()
+  const [form, setForm] = useState({ name: '', phone: '', address: '', note: '', scheduledAt: '' })
+  const [couponInput, setCouponInput] = useState(coupon)
   const [pay, setPay] = useState('cod')
   const [errors, setErrors] = useState({})
   const [formError, setFormError] = useState('')
@@ -55,7 +56,13 @@ export default function Cart() {
     e.preventDefault()
     setBusy(true); setErrors({}); setFormError('')
     try {
-      const order = await api.placeOrder({ ...form, paymentMethod: opt.method, payApp: opt.app, items: lines.map((l) => ({ id: l.item.id, qty: l.qty })) })
+      const order = await api.placeOrder({
+        ...form,
+        paymentMethod: opt.method,
+        payApp: opt.app,
+        couponCode: coupon,
+        items: lines.map((l) => ({ id: l.item.id, qty: l.qty, customizations: l.customizations })),
+      })
       setPlaced(order)
       clear()
       if (order.state === 'pending_payment') { setBusy(false); await startPayment(order) }
@@ -130,26 +137,37 @@ export default function Cart() {
               <div className="card">
                 <h3>Items</h3>
                 <ul className="lines">
-                  {lines.map(({ item, qty }) => (
+                  {lines.map((line) => {
+                    const { item, qty } = line
+                    return (
                     <li key={item.id}>
                       <img src={img(item.photo)} alt="" style={item.pos ? { objectPosition: item.pos } : undefined} />
-                      <div className="lname"><b>{item.name}</b><span>{rupee(item.price)} each</span>
+                      <div className="lname"><b>{item.name}</b><span>{rupee(item.price + line.customizations.reduce((a, x) => a + Number(x.price || 0), 0))} each</span>
+                        {line.customizations.length > 0 && <small>{line.customizations.map((x) => x.name).join(' · ')}</small>}
                         <button className="link" onClick={() => drop(item.id)}>Remove</button></div>
                       <div className="qty" role="group" aria-label={`Quantity of ${item.name}`}>
                         <button onClick={() => remove(item.id)} aria-label="Remove one">−</button><span>{qty}</span><button onClick={() => add(item.id)} aria-label="Add one">+</button>
                       </div>
-                      <b className="ltotal">{rupee(item.price * qty)}</b>
+                      <b className="ltotal">{rupee((item.price + line.customizations.reduce((a, x) => a + Number(x.price || 0), 0)) * qty)}</b>
                     </li>
-                  ))}
+                    )
+                  })}
                 </ul>
                 <dl className="sum">
                   <div><dt>Subtotal</dt><dd>{rupee(subtotal)}</dd></div>
+                  {discount > 0 && <div><dt>WELCOME10</dt><dd>−{rupee(discount)}</dd></div>}
                   <div><dt>Delivery</dt><dd>{deliveryFee === 0 ? 'Free' : rupee(deliveryFee)}</dd></div>
                   <div><dt>CGST</dt><dd>{rupee(gst.cgst)}</dd></div>
                   <div><dt>SGST</dt><dd>{rupee(gst.sgst)}</dd></div>
                   {deliveryFee > 0 && <p className="hint">Add {rupee(config.freeDeliveryAbove - subtotal)} more for free delivery.</p>}
                   <div className="grand"><dt>Total</dt><dd>{rupee(total)}</dd></div>
                 </dl>
+                <div className="coupon-box">
+                  <input aria-label="Coupon code" value={couponInput} onChange={(e) => setCouponInput(e.target.value)} placeholder="Coupon code" />
+                  <button type="button" className="btn outline sm" onClick={() => applyCoupon(couponInput)}>Apply</button>
+                </div>
+                {coupon && <p className="ok">WELCOME10 applied: 10% off.</p>}
+                {discount === 0 && couponInput.trim().toUpperCase() === 'WELCOME10' && coupon !== 'WELCOME10' && <p className="hint">Tap Apply to use WELCOME10.</p>}
                 <p className="hint">GST included in the total: {rupee(gst.total)} (items 5%{deliveryFee > 0 ? `, delivery ${config.deliveryGst}%` : ''}).</p>
               </div>
 
@@ -166,6 +184,8 @@ export default function Cart() {
                 {errors.address && <p className="ferr">{errors.address}</p>}
                 <label htmlFor="cd">Note for the kitchen (optional)</label>
                 <input id="cd" value={form.note} onChange={set('note')} />
+                <label htmlFor="scheduled">Schedule order (optional)</label>
+                <input id="scheduled" type="datetime-local" value={form.scheduledAt} onChange={set('scheduledAt')} />
 
                 <h3>Payment method</h3>
                 <div className="pays" role="radiogroup" aria-label="Payment method">

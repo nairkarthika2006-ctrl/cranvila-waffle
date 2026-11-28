@@ -53,6 +53,15 @@ r.patch('/orders/:id', (req, res) => {
     if (o.paymentMethod !== 'cod' || o.status === 'cancelled') return res.status(409).json({ error: 'Not a COD order in progress' })
     o.paymentStatus = 'paid'; o.paidAt = new Date().toISOString()
     logPayment({ orderId: o.id, event: 'cod_collected', method: 'cod', amount: o.total, status: 'paid' })
+  } else if (action === 'paid') {
+    o.paymentStatus = 'paid'; o.paidAt = new Date().toISOString()
+    logPayment({ orderId: o.id, event: 'marked_paid_by_admin', method: o.paymentMethod, amount: o.total, status: 'paid' })
+  } else if (action === 'failed') {
+    o.paymentStatus = 'failed'
+    cancelOrder(o, 'admin', 'Online payment failed')
+  } else if (action === 'refunded') {
+    o.paymentStatus = 'refunded'; o.refundedAt = new Date().toISOString()
+    logPayment({ orderId: o.id, event: 'refund_completed', method: o.paymentMethod, amount: o.total, status: 'refunded' })
   } else {
     if (step !== null && !(Number.isInteger(step) && step >= 0 && step <= 3)) return res.status(400).json({ error: 'step must be 0-3 or null' })
     o.manualStep = step

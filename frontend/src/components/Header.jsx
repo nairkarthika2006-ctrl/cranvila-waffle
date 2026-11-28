@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { PHONE, PHONE_LINK } from '../data.js'
 import { useStore } from '../context/Store.jsx'
+import { useI18n } from '../context/I18n.jsx'
 
 const links = [
-  ['/', 'Home'], ['/about', 'About us'], ['/menu', 'Menu'], ['/tracking', 'Order tracking'], ['/contact', 'Contact'],
+  ['/', 'home'], ['/about', 'about'], ['/menu', 'menu'], ['/tracking', 'tracking'], ['/contact', 'contact'],
 ]
 
 export default function Header() {
@@ -12,6 +13,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const { pathname } = useLocation()
   const { count } = useStore()
+  const { lang, setLang, t } = useI18n()
 
   useEffect(() => setOpen(false), [pathname])
   useEffect(() => {
@@ -28,13 +30,16 @@ export default function Header() {
         <span></span><span></span>
       </button>
       <nav className={open ? 'open' : ''}>
-        {links.map(([to, label]) => (
-          <NavLink key={to} to={to} end className={({ isActive }) => (isActive ? 'on' : '')}>{label}</NavLink>
+        {links.map(([to, key]) => (
+          <NavLink key={to} to={to} end className={({ isActive }) => (isActive ? 'on' : '')}>{t(key)}</NavLink>
         ))}
         <NavLink to="/cart" className={({ isActive }) => `cartlink${isActive ? ' on' : ''}`}>
-          Your order{count > 0 && <b className="badge">{count}</b>}
+          {t('cart')}{count > 0 && <b className="badge">{count}</b>}
         </NavLink>
         <a className="call" href={PHONE_LINK}>{PHONE}</a>
+        <select className="lang-toggle" aria-label="Language" value={lang} onChange={(e) => setLang(e.target.value)}>
+          <option value="en">EN</option><option value="hi">हिं</option><option value="gu">ગુ</option>
+        </select>
       </nav>
     </header>
   )

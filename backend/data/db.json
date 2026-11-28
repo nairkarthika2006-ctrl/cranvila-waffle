@@ -1,5 +1,5 @@
 {
-  "nextOrder": 1023,
+  "nextOrder": 1024,
   "orders": [
     {
       "id": "CW1001",
@@ -1035,6 +1035,54 @@
       "cancellation": null,
       "confirmedAt": "2026-11-28T07:08:20.811Z",
       "confirmedBy": "customer"
+    },
+    {
+      "id": "CW1023",
+      "createdAt": "2026-11-28T08:50:38.316Z",
+      "manualStep": null,
+      "status": "confirmed",
+      "confirmBy": "2026-11-28T09:10:38.316Z",
+      "payBy": null,
+      "name": "Karthika Nair",
+      "phone": "56577675656",
+      "address": "4RCX+C3W\nBhestan-Jiav Rd\nBhestan",
+      "note": "good",
+      "scheduledAt": "2026-11-28T11:53:00.000Z",
+      "paymentMethod": "cod",
+      "payApp": null,
+      "paymentStatus": "cod_due",
+      "items": [
+        {
+          "id": "caramel-crown",
+          "name": "Caramel Crown",
+          "price": 319,
+          "qty": 1,
+          "customizations": [],
+          "gstRate": 5
+        },
+        {
+          "id": "fudge-stack",
+          "name": "Fudge Stack",
+          "price": 299,
+          "qty": 1,
+          "customizations": [],
+          "gstRate": 5
+        }
+      ],
+      "subtotal": 618,
+      "discount": 0,
+      "couponCode": "",
+      "deliveryFee": 0,
+      "deliveryGst": 0,
+      "gst": {
+        "cgst": 15.45,
+        "sgst": 15.45,
+        "total": 30.9
+      },
+      "total": 648.9,
+      "cancellation": null,
+      "confirmedAt": "2026-11-28T08:50:41.434Z",
+      "confirmedBy": "customer"
     }
   ],
   "messages": [
@@ -1044,6 +1092,16 @@
       "name": "Karthika Nair",
       "phone": "9940105761",
       "message": "the waffle was very nive and it is very best"
+    },
+    {
+      "id": "mx060ozq",
+      "createdAt": "2026-11-28T08:45:37.286Z",
+      "name": "Bulk Test",
+      "phone": "9876543210",
+      "message": "Need 40 waffles",
+      "enquiryType": "bulk",
+      "eventDate": "2026-12-20T18:00",
+      "guests": "40"
     }
   ],
   "customers": [
@@ -1072,7 +1130,7 @@
       "noResponseCount": 0,
       "firstSeen": "2026-11-26T07:15:19.501Z",
       "lastSeen": "2026-11-26T10:33:20.305Z",
-      "lastOrderAt": "2026-11-28T07:08:19.090Z"
+      "lastOrderAt": "2026-11-28T08:50:38.317Z"
     },
     {
       "phone": "9876543210",
@@ -1188,6 +1246,16 @@
       "method": "cod",
       "app": null,
       "amount": 537.3,
+      "status": "cod_due"
+    },
+    {
+      "id": "PLmx06759puajp",
+      "at": "2026-11-28T08:50:38.317Z",
+      "orderId": "CW1023",
+      "event": "cod_selected",
+      "method": "cod",
+      "app": null,
+      "amount": 648.9,
       "status": "cod_due"
     }
   ],

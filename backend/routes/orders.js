@@ -6,6 +6,7 @@ import { getDb, save, logPayment, normPhone, upsertCustomer, customerOf } from '
 import { cancelOrder, sweep, inMin, CONFIRM_MINUTES, PAY_MINUTES, NO_RESPONSE_LIMIT } from '../orderLogic.js'
 
 const r = Router()
+const r2 = (n) => Math.round((n + Number.EPSILON) * 100) / 100
 const TOTAL_MINUTES = 30 // confirmed -> delivered
 const LABELS = ['Order placed', 'Preparing', 'Out for delivery', 'Delivered']
 const MESSAGES = [
@@ -45,6 +46,7 @@ export const publicView = (o) => {
     id: o.id, state: o.status, step, status: step === -1 ? 'Cancelled' : LABELS[step], message: messageOf(o, step), eta: etaOf(o, step), createdAt: o.createdAt,
     items: o.items, subtotal: o.subtotal, deliveryFee: o.deliveryFee, deliveryGst: o.deliveryGst, gst: o.gst, total: o.total,
     paymentMethod: o.paymentMethod, payApp: o.payApp, paymentStatus: o.paymentStatus,
+    scheduledAt: o.scheduledAt || null, couponCode: o.couponCode || '', discount: o.discount || 0,
     confirmBy: o.status === 'pending_confirmation' ? o.confirmBy : null, payBy: o.status === 'pending_payment' ? o.payBy : null,
     canRate: o.status === 'confirmed' && step === 3 && !o.rating, rating: o.rating || null,
     canCancel: o.status !== 'cancelled' && step < 2, cancellation: o.cancellation || null,
@@ -59,7 +61,7 @@ const find = (id) => getDb().orders.find((x) => x.id === String(id).trim().toUpp
 const phoneOk = (o, p) => normPhone(p).length === 10 && normPhone(p) === normPhone(o.phone)
 
 r.post('/', (req, res) => {
-  const { name, phone, address, note = '', items, paymentMethod = 'cod', payApp = null } = req.body || {}
+  const { name, phone, address, note = '', items, paymentMethod = 'cod', payApp = null, couponCode = '', scheduledAt = null } = req.body || {}
   const fields = {}
   const cleanName = String(name || '').trim()
   const cleanPhone = String(phone || '').replace(/[\s-]/g, '')
@@ -80,7 +82,9 @@ r.post('/', (req, res) => {
       const qty = Number(it?.qty)
       if (!m || seen.has(m.id) || !Number.isInteger(qty) || qty < 1 || qty > 20) { fields.items = 'One of the items in your cart is not valid.'; break }
       seen.add(m.id)
-      lines.push({ id: m.id, name: m.name, price: m.price, qty, gst: m.gst })
+      const addOns = Array.isArray(it?.customizations) ? it.customizations.filter((a) => a && Number.isFinite(Number(a.price))).slice(0, 8).map((a) => ({ name: String(a.name).slice(0, 60), price: Math.max(0, Math.min(200, Number(a.price))) })) : []
+      const unitPrice = r2(m.price + addOns.reduce((s, a) => s + a.price, 0))
+      lines.push({ id: m.id, name: m.name, price: unitPrice, qty, gst: m.gst, customizations: addOns })
     }
   }
   const known = customerOf({ phone: cleanPhone })
@@ -90,13 +94,13 @@ r.post('/', (req, res) => {
   if (Object.keys(fields).length) return res.status(400).json({ error: 'Please fix the highlighted fields.', fields })
 
   const db = getDb()
-  const t = totals(lines)
+  const t = totals(lines, couponCode)
   const cod = paymentMethod === 'cod'
   const order = {
     id: `CW${db.nextOrder++}`, createdAt: new Date().toISOString(), manualStep: null,
     status: cod ? 'pending_confirmation' : 'pending_payment',
     confirmBy: cod ? inMin(CONFIRM_MINUTES) : null, payBy: cod ? null : inMin(PAY_MINUTES),
-    name: cleanName, phone: cleanPhone, address: cleanAddr, note: String(note).trim(),
+    name: cleanName, phone: cleanPhone, address: cleanAddr, note: String(note).trim(), scheduledAt: scheduledAt ? new Date(scheduledAt).toISOString() : null,
     paymentMethod, payApp: cod ? null : payApp || 'upi', paymentStatus: cod ? 'cod_due' : 'pending',
     items: lines.map(({ gst, ...l }) => ({ ...l, gstRate: gst })), ...t, cancellation: null,
   }
@@ -104,6 +108,15 @@ r.post('/', (req, res) => {
   upsertCustomer({ name: cleanName, phone: cleanPhone, address: cleanAddr })
   logPayment({ orderId: order.id, event: cod ? 'cod_selected' : 'online_selected', method: cod ? 'cod' : 'upi', app: order.payApp, amount: order.total, status: order.paymentStatus })
   res.status(201).json(publicView(order))
+})
+
+r.get('/phone/:phone', (req, res) => {
+  const phone = normPhone(req.params.phone)
+  if (phone.length !== 10) return res.status(400).json({ error: 'Enter a valid 10-digit phone number.' })
+  const db = getDb()
+  const mine = db.orders.filter((o) => normPhone(o.phone) === phone).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))
+  if (!mine.length) return res.status(404).json({ error: 'No previous orders found for this phone number.' })
+  res.json(mine.slice(0, 5).map(publicView))
 })
 
 r.get('/:id', (req, res) => {
