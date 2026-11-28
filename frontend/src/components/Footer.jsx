@@ -22,7 +22,7 @@ export default function Footer() {
           <p><a href={PHONE_LINK}>{PHONE}</a><br /><a href={`mailto:${EMAIL}`}>{EMAIL}</a></p>
         </div>
       </div>
-      <p className="copy">© 2026 Cranvila Waffle</p>
+      <p className="copy">© 2026 Cranvila Waffle Made by Nair Karthika </p>
     </footer>
   )
 }
