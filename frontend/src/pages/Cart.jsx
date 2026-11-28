@@ -4,6 +4,7 @@ import { api } from '../api.js'
 import { img, rupee, PAY_OPTIONS, PAY_LABEL } from '../data.js'
 import { useStore } from '../context/Store.jsx'
 import OrderActions from '../components/OrderActions.jsx'
+import { useI18n } from '../context/I18n.jsx'
 
 const loadCheckout = () => new Promise((resolve, reject) => {
   if (window.Razorpay) return resolve()
@@ -16,6 +17,7 @@ const loadCheckout = () => new Promise((resolve, reject) => {
 
 export default function Cart() {
   const { lines, subtotal, discount, coupon, discountedSubtotal, deliveryFee, gst, total, config, add, remove, drop, clear, applyCoupon } = useStore()
+  const { t, itemName } = useI18n()
   const [form, setForm] = useState({ name: '', phone: '', address: '', note: '', scheduledAt: '' })
   const [couponInput, setCouponInput] = useState(coupon)
   const [pay, setPay] = useState('cod')
@@ -39,17 +41,17 @@ export default function Cart() {
         prefill: { name: p.name, contact: p.phone, method: 'upi' },
         theme: { color: '#8E1F3D' },
         handler: async (r) => {
-          try { setPlaced(await api.payVerify({ orderId: order.id, phone: form.phone, ...r })) } catch (e) { setFormError(e.message) }
+          try { setPlaced(await api.payVerify({ orderId: order.id, phone: form.phone, ...r })) } catch (e) { setFormError(t(e.message)) }
         },
-        modal: { ondismiss: () => { api.payEvent({ orderId: order.id, phone: form.phone, event: 'checkout_closed' }); setFormError('Payment was not completed. You can try again.') } },
+        modal: { ondismiss: () => { api.payEvent({ orderId: order.id, phone: form.phone, event: 'checkout_closed' }); setFormError(t('Payment was not completed. You can try again.')) } },
       })
       rz.on('payment.failed', (r) => api.payEvent({ orderId: order.id, phone: form.phone, event: 'payment_failed', code: r.error?.code, description: r.error?.description }))
       rz.open()
-    } catch (e) { setFormError(e.message) } finally { setBusy(false) }
+    } catch (e) { setFormError(t(e.message)) } finally { setBusy(false) }
   }
   const demoPay = async (outcome) => {
     setBusy(true); setFormError('')
-    try { setPlaced(await api.payDemo({ orderId: placed.id, phone: form.phone, outcome })); setDemo(false) } catch (e) { setFormError(e.message) } finally { setBusy(false) }
+    try { setPlaced(await api.payDemo({ orderId: placed.id, phone: form.phone, outcome })); setDemo(false) } catch (e) { setFormError(t(e.message)) } finally { setBusy(false) }
   }
 
   const submit = async (e) => {
@@ -68,7 +70,7 @@ export default function Cart() {
       if (order.state === 'pending_payment') { setBusy(false); await startPayment(order) }
     } catch (err) {
       setErrors(err.fields || {})
-      setFormError(err.message)
+      setFormError(t(err.message))
     } finally {
       setBusy(false)
     }
@@ -83,37 +85,37 @@ export default function Cart() {
     const heads = { pending_confirmation: 'Confirm your order', pending_payment: 'Complete your payment', confirmed: 'Order confirmed', cancelled: 'Order cancelled' }
     return (
       <>
-        <section className="phead"><div className="wrap"><h1>{heads[placed.state]}</h1><p>{placed.message}</p></div></section>
+        <section className="phead"><div className="wrap"><h1>{t(heads[placed.state])}</h1><p>{t(placed.message)}</p></div></section>
         <section className="sec">
           <div className="wrap narrow">
             <div className="card center">
-              <p className="muted">Your order ID</p>
+              <p className="muted">{t('Your order ID')}</p>
               <p className="bigid">{placed.id}</p>
-              <p>{placed.paymentMethod === 'cod' ? 'To pay on delivery' : `Online payment (${PAY_LABEL[placed.payApp] || 'UPI'})`}: <b>{rupee(placed.total)}</b></p>
-              {placed.paymentStatus === 'paid' && <p className="ok">Payment received. Thank you.</p>}
+              <p>{placed.paymentMethod === 'cod' ? t('To pay on delivery') : t('Online payment ({method})', { method: PAY_LABEL[placed.payApp] || 'UPI' })}: <b>{rupee(placed.total)}</b></p>
+              {placed.paymentStatus === 'paid' && <p className="ok">{t('Payment received. Thank you.')}</p>}
 
-              {placed.state === 'pending_confirmation' && <p className="notice">Tap <b>Confirm order</b> within {mins} min. If we do not hear from you, this order is cancelled automatically.</p>}
+              {placed.state === 'pending_confirmation' && <p className="notice">{t('Tap Confirm order within {minutes} min. If we do not hear from you, this order is cancelled automatically.', { minutes: mins })}</p>}
               {placed.state === 'pending_payment' && !demo && (
                 <>
-                  <p className="notice">Pay within {mins} min or the order will be cancelled.</p>
-                  <button className="btn gold" onClick={() => startPayment(placed)} disabled={busy}>{busy ? 'Opening payment...' : `Pay ${rupee(placed.total)}`}</button>
+                  <p className="notice">{t('Pay within {minutes} min or the order will be cancelled.', { minutes: mins })}</p>
+                  <button className="btn gold" onClick={() => startPayment(placed)} disabled={busy}>{busy ? t('Opening payment...') : t('Pay {amount}', { amount: rupee(placed.total) })}</button>
                 </>
               )}
               {placed.state === 'pending_payment' && demo && (
                 <div className="confirmbox">
-                  <p className="step">Demo mode: no real money moves</p>
-                  <p>No payment gateway keys are set yet, so this is a simulated {PAY_LABEL[placed.payApp] || 'UPI'} payment of {rupee(placed.total)}.</p>
+                  <p className="step">{t('Demo mode: no real money moves')}</p>
+                  <p>{t('No payment gateway keys are set yet, so this is a simulated {method} payment of {amount}.', { method: PAY_LABEL[placed.payApp] || 'UPI', amount: rupee(placed.total) })}</p>
                   <div className="btns">
-                    <button className="btn gold sm" onClick={() => demoPay('success')} disabled={busy}>Simulate successful payment</button>
-                    <button className="btn outline sm" onClick={() => demoPay('fail')} disabled={busy}>Simulate failure</button>
+                    <button className="btn gold sm" onClick={() => demoPay('success')} disabled={busy}>{t('Simulate successful payment')}</button>
+                    <button className="btn outline sm" onClick={() => demoPay('fail')} disabled={busy}>{t('Simulate failure')}</button>
                   </div>
                 </div>
               )}
               {formError && <p className="ferr" role="alert">{formError}</p>}
 
               <OrderActions order={placed} phone={form.phone} onChange={setPlaced} />
-              <div className="btns"><Link className="btn gold" to={`/tracking?id=${placed.id}`}>Track this order</Link><Link className="btn outline" to="/menu">Order more</Link></div>
-              <p className="hint">Save this ID. You can use it any time on the Order tracking page.</p>
+              <div className="btns"><Link className="btn gold" to={`/tracking?id=${placed.id}`}>{t('Track this order')}</Link><Link className="btn outline" to="/menu">{t('Order more')}</Link></div>
+              <p className="hint">{t('Save this ID. You can use it any time on the Order tracking page.')}</p>
             </div>
           </div>
         </section>
@@ -123,30 +125,30 @@ export default function Cart() {
 
   return (
     <>
-      <section className="phead"><div className="wrap"><h1>Your order</h1><p>Check your waffles and tell us where to send them.</p></div></section>
+      <section className="phead"><div className="wrap"><h1>{t('Your order')}</h1><p>{t('Check your waffles and tell us where to send them.')}</p></div></section>
       <section className="sec">
         <div className="wrap">
           {lines.length === 0 ? (
             <div className="card center">
-              <h3>Your order is empty</h3>
-              <p>Pick a waffle from the menu and it will appear here.</p>
-              <div className="btns"><Link className="btn gold" to="/menu">Browse the menu</Link></div>
+              <h3>{t('Your order is empty')}</h3>
+              <p>{t('Pick a waffle from the menu and it will appear here.')}</p>
+              <div className="btns"><Link className="btn gold" to="/menu">{t('Browse the menu')}</Link></div>
             </div>
           ) : (
             <div className="cartgrid">
               <div className="card">
-                <h3>Items</h3>
+                <h3>{t('Items')}</h3>
                 <ul className="lines">
                   {lines.map((line) => {
                     const { item, qty } = line
                     return (
                     <li key={item.id}>
                       <img src={img(item.photo)} alt="" style={item.pos ? { objectPosition: item.pos } : undefined} />
-                      <div className="lname"><b>{item.name}</b><span>{rupee(item.price + line.customizations.reduce((a, x) => a + Number(x.price || 0), 0))} each</span>
-                        {line.customizations.length > 0 && <small>{line.customizations.map((x) => x.name).join(' · ')}</small>}
-                        <button className="link" onClick={() => drop(item.id)}>Remove</button></div>
-                      <div className="qty" role="group" aria-label={`Quantity of ${item.name}`}>
-                        <button onClick={() => remove(item.id)} aria-label="Remove one">−</button><span>{qty}</span><button onClick={() => add(item.id)} aria-label="Add one">+</button>
+                      <div className="lname"><b>{itemName(item.id, item.name)}</b><span>{rupee(item.price + line.customizations.reduce((a, x) => a + Number(x.price || 0), 0))} {t('each')}</span>
+                        {line.customizations.length > 0 && <small>{line.customizations.map((x) => t(x.name)).join(' · ')}</small>}
+                        <button className="link" onClick={() => drop(item.id)}>{t('Remove')}</button></div>
+                      <div className="qty" role="group" aria-label={t('Quantity of {name}', { name: itemName(item.id, item.name) })}>
+                        <button onClick={() => remove(item.id)} aria-label={t('Remove one')}>−</button><span>{qty}</span><button onClick={() => add(item.id)} aria-label={t('Add one')}>+</button>
                       </div>
                       <b className="ltotal">{rupee((item.price + line.customizations.reduce((a, x) => a + Number(x.price || 0), 0)) * qty)}</b>
                     </li>
@@ -154,53 +156,53 @@ export default function Cart() {
                   })}
                 </ul>
                 <dl className="sum">
-                  <div><dt>Subtotal</dt><dd>{rupee(subtotal)}</dd></div>
+                  <div><dt>{t('Subtotal')}</dt><dd>{rupee(subtotal)}</dd></div>
                   {discount > 0 && <div><dt>WELCOME10</dt><dd>−{rupee(discount)}</dd></div>}
-                  <div><dt>Delivery</dt><dd>{deliveryFee === 0 ? 'Free' : rupee(deliveryFee)}</dd></div>
-                  <div><dt>CGST</dt><dd>{rupee(gst.cgst)}</dd></div>
-                  <div><dt>SGST</dt><dd>{rupee(gst.sgst)}</dd></div>
-                  {deliveryFee > 0 && <p className="hint">Add {rupee(config.freeDeliveryAbove - subtotal)} more for free delivery.</p>}
-                  <div className="grand"><dt>Total</dt><dd>{rupee(total)}</dd></div>
+                  <div><dt>{t('Delivery')}</dt><dd>{deliveryFee === 0 ? t('Free') : rupee(deliveryFee)}</dd></div>
+                  <div><dt>{t('CGST')}</dt><dd>{rupee(gst.cgst)}</dd></div>
+                  <div><dt>{t('SGST')}</dt><dd>{rupee(gst.sgst)}</dd></div>
+                  {deliveryFee > 0 && <p className="hint">{t('Add {amount} more for free delivery.', { amount: rupee(config.freeDeliveryAbove - subtotal) })}</p>}
+                  <div className="grand"><dt>{t('Total')}</dt><dd>{rupee(total)}</dd></div>
                 </dl>
                 <div className="coupon-box">
-                  <input aria-label="Coupon code" value={couponInput} onChange={(e) => setCouponInput(e.target.value)} placeholder="Coupon code" />
-                  <button type="button" className="btn outline sm" onClick={() => applyCoupon(couponInput)}>Apply</button>
+                  <input aria-label={t('Coupon code')} value={couponInput} onChange={(e) => setCouponInput(e.target.value)} placeholder={t('Coupon code')} />
+                  <button type="button" className="btn outline sm" onClick={() => applyCoupon(couponInput)}>{t('Apply')}</button>
                 </div>
-                {coupon && <p className="ok">WELCOME10 applied: 10% off.</p>}
-                {discount === 0 && couponInput.trim().toUpperCase() === 'WELCOME10' && coupon !== 'WELCOME10' && <p className="hint">Tap Apply to use WELCOME10.</p>}
-                <p className="hint">GST included in the total: {rupee(gst.total)} (items 5%{deliveryFee > 0 ? `, delivery ${config.deliveryGst}%` : ''}).</p>
+                {coupon && <p className="ok">{t('WELCOME10 applied: 10% off.')}</p>}
+                {discount === 0 && couponInput.trim().toUpperCase() === 'WELCOME10' && coupon !== 'WELCOME10' && <p className="hint">{t('Tap Apply to use WELCOME10.')}</p>}
+                <p className="hint">{t('GST included in the total: {amount} (items 5%{delivery}).', { amount: rupee(gst.total), delivery: deliveryFee > 0 ? `, delivery ${config.deliveryGst}%` : '' })}</p>
               </div>
 
               <form className="card" onSubmit={submit} noValidate>
-                <h3>Delivery details</h3>
-                <label htmlFor="cn">Name</label>
+                <h3>{t('Delivery details')}</h3>
+                <label htmlFor="cn">{t('Name')}</label>
                 <input id="cn" value={form.name} onChange={set('name')} autoComplete="name" aria-invalid={!!errors.name} />
-                {errors.name && <p className="ferr">{errors.name}</p>}
-                <label htmlFor="cp">Phone</label>
+                {errors.name && <p className="ferr">{t(errors.name)}</p>}
+                <label htmlFor="cp">{t('Phone')}</label>
                 <input id="cp" type="tel" value={form.phone} onChange={set('phone')} autoComplete="tel" aria-invalid={!!errors.phone} />
-                {errors.phone && <p className="ferr">{errors.phone}</p>}
-                <label htmlFor="ca">Delivery address</label>
+                {errors.phone && <p className="ferr">{t(errors.phone)}</p>}
+                <label htmlFor="ca">{t('Delivery address')}</label>
                 <textarea id="ca" rows="3" value={form.address} onChange={set('address')} autoComplete="street-address" aria-invalid={!!errors.address} />
-                {errors.address && <p className="ferr">{errors.address}</p>}
-                <label htmlFor="cd">Note for the kitchen (optional)</label>
+                {errors.address && <p className="ferr">{t(errors.address)}</p>}
+                <label htmlFor="cd">{t('Note for the kitchen (optional)')}</label>
                 <input id="cd" value={form.note} onChange={set('note')} />
-                <label htmlFor="scheduled">Schedule order (optional)</label>
+                <label htmlFor="scheduled">{t('Schedule order (optional)')}</label>
                 <input id="scheduled" type="datetime-local" value={form.scheduledAt} onChange={set('scheduledAt')} />
 
-                <h3>Payment method</h3>
-                <div className="pays" role="radiogroup" aria-label="Payment method">
+                <h3>{t('Payment method')}</h3>
+                <div className="pays" role="radiogroup" aria-label={t('Payment method')}>
                   {PAY_OPTIONS.map((o) => (
                     <label key={o.key} className={`pay${pay === o.key ? ' on' : ''}`}>
                       <input type="radio" name="pay" checked={pay === o.key} onChange={() => setPay(o.key)} />
-                      <span><b>{o.label}</b><small>{o.hint}</small></span>
+                      <span><b>{t(o.label)}</b><small>{t(o.hint)}</small></span>
                     </label>
                   ))}
                 </div>
-                {errors.paymentMethod && <p className="ferr">{errors.paymentMethod}</p>}
+                {errors.paymentMethod && <p className="ferr">{t(errors.paymentMethod)}</p>}
 
                 {formError && <p className="ferr" role="alert">{formError}</p>}
-                <button className="btn gold block" type="submit" disabled={busy}>{busy ? 'Please wait...' : opt.method === 'cod' ? `Place order · ${rupee(total)}` : `Place order and pay · ${rupee(total)}`}</button>
-                <p className="hint">You can cancel before the rider leaves. See the <Link to="/cancellation-policy">cancellation policy</Link>.</p>
+                <button className="btn gold block" type="submit" disabled={busy}>{busy ? t('Please wait...') : opt.method === 'cod' ? t('Place order · {amount}', { amount: rupee(total) }) : t('Place order and pay · {amount}', { amount: rupee(total) })}</button>
+                <p className="hint">{t('You can cancel before the rider leaves. See the')} <Link to="/cancellation-policy">{t('cancellation policy')}</Link>.</p>
               </form>
             </div>
           )}

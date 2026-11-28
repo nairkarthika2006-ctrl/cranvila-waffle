@@ -5,9 +5,11 @@ import { steps, rupee, PAY_LABEL } from '../data.js'
 import OrderActions from '../components/OrderActions.jsx'
 import RateOrder from '../components/RateOrder.jsx'
 import { useStore } from '../context/Store.jsx'
+import { useI18n } from '../context/I18n.jsx'
 
 export default function Tracking() {
   const { add } = useStore()
+  const { t, itemName } = useI18n()
   const [params, setParams] = useSearchParams()
   const id = (params.get('id') || '').toUpperCase()
   const [value, setValue] = useState(id)
@@ -31,7 +33,7 @@ export default function Tracking() {
         if (o.step < 3 && o.state !== 'cancelled') timer = setTimeout(() => load(false), 15000)
       } catch (err) {
         if (stop) return
-        if (first) { setOrder(null); setError(err.message) }
+        if (first) { setOrder(null); setError(t(err.message)) }
         else timer = setTimeout(() => load(false), 15000)
       } finally {
         if (first && !stop) setLoading(false)
@@ -39,7 +41,7 @@ export default function Tracking() {
     }
     load(true)
     return () => { stop = true; clearTimeout(timer) }
-  }, [id])
+  }, [id, t])
 
   const submit = (e) => {
     e.preventDefault()
@@ -50,73 +52,73 @@ export default function Tracking() {
     e.preventDefault()
     setReorderError(''); setPastOrders([])
     try { setPastOrders(await api.reorder(reorderPhone)) }
-    catch (err) { setReorderError(err.message) }
+    catch (err) { setReorderError(t(err.message)) }
   }
   const state = (i) => order.step < 0 ? '' : (order.step === 3 || i < order.step ? 'done' : i === order.step ? 'now' : '')
 
   return (
     <>
-      <section className="phead"><div className="wrap"><h1>Order tracking</h1><p>Enter your order ID to see where your waffles are.</p></div></section>
+      <section className="phead"><div className="wrap"><h1>{t('Order tracking')}</h1><p>{t('Enter your order ID to see where your waffles are.')}</p></div></section>
       <section className="sec">
         <div className="wrap narrow">
           <form className="card" onSubmit={submit}>
-            <label htmlFor="oid">Order ID</label>
+            <label htmlFor="oid">{t('Order ID')}</label>
             <div className="inline">
-              <input id="oid" placeholder="e.g. CW1002" autoComplete="off" required value={value} onChange={(e) => setValue(e.target.value)} />
-              <button className="btn gold" type="submit">Track order</button>
+              <input id="oid" placeholder={t('e.g. CW1002')} autoComplete="off" required value={value} onChange={(e) => setValue(e.target.value)} />
+              <button className="btn gold" type="submit">{t('Track order')}</button>
             </div>
-            <p className="hint">Demo IDs to try: CW1001, CW1002, CW1003 (CW1003 is delivered, demo phone 9876543210)</p>
+            <p className="hint">{t('Demo IDs to try: CW1001, CW1002, CW1003 (CW1003 is delivered, demo phone 9876543210)')}</p>
           </form>
           <form className="card" onSubmit={findPastOrders}>
-            <h3>Reorder a favourite</h3>
-            <label htmlFor="rphone">Phone number used for past orders</label>
+            <h3>{t('Reorder a favourite')}</h3>
+            <label htmlFor="rphone">{t('Phone number used for past orders')}</label>
             <div className="inline">
-              <input id="rphone" type="tel" value={reorderPhone} onChange={(e) => setReorderPhone(e.target.value)} placeholder="10-digit phone number" />
-              <button className="btn outline" type="submit">Find orders</button>
+              <input id="rphone" type="tel" value={reorderPhone} onChange={(e) => setReorderPhone(e.target.value)} placeholder={t('10-digit phone number')} />
+              <button className="btn outline" type="submit">{t('Find orders')}</button>
             </div>
             {reorderError && <p className="err">{reorderError}</p>}
             {pastOrders.map((old) => (
               <div className="reorder-row" key={old.id}>
-                <div><b>{old.id}</b><span>{old.items.map((x) => `${x.qty} × ${x.name}`).join(', ')}</span></div>
-                <button type="button" className="btn gold sm" onClick={() => { old.items.forEach((x) => add(x.id, x.customizations || [])); setReorderPhone('') }}>Add again</button>
+                <div><b>{old.id}</b><span>{old.items.map((x) => `${x.qty} × ${itemName(x.id, x.name)}`).join(', ')}</span></div>
+                <button type="button" className="btn gold sm" onClick={() => { old.items.forEach((x) => add(x.id, x.customizations || [])); setReorderPhone('') }}>{t('Add again')}</button>
               </div>
             ))}
           </form>
 
-          {loading && <p className="hint">Looking up your order...</p>}
+          {loading && <p className="hint">{t('Looking up your order...')}</p>}
 
           {order && (
             <div className="card">
               <div className="rhead">
-                <div><h3>Order {order.id}</h3><p>{order.message}</p></div>
-                <span className="eta">{order.eta}</span>
+                <div><h3>{t('Order')} {order.id}</h3><p>{t(order.message)}</p></div>
+                <span className="eta">{t(order.eta)}</span>
               </div>
               {order.state === 'cancelled' ? (
                 <div className="notice cancelled">
-                  <b>Cancelled{order.cancellation?.by === 'system' ? ' automatically' : order.cancellation?.by === 'customer' ? ' by you' : ' by the shop'}.</b>
-                  {order.cancellation?.reason && <span> {order.cancellation.reason}.</span>}
-                  {order.paymentStatus === 'refund_pending' && <span> Refund in progress.</span>}
-                  {order.paymentStatus === 'refunded' && <span> Refund issued to your account (5 to 7 working days).</span>}
+                  <b>{t('Cancelled')}{order.cancellation?.by === 'system' ? ` ${t('automatically')}` : order.cancellation?.by === 'customer' ? ` ${t('by you')}` : ` ${t('by the shop')}`}.</b>
+                  {order.cancellation?.reason && <span> {t(order.cancellation.reason)}.</span>}
+                  {order.paymentStatus === 'refund_pending' && <span> {t('Refund in progress.')}</span>}
+                  {order.paymentStatus === 'refunded' && <span> {t('Refund issued to your account (5 to 7 working days).')}</span>}
                 </div>
               ) : (
                 <ol className="tsteps">
-                  {steps.map((s, i) => <li key={s} className={state(i)}><i></i>{s}</li>)}
+                  {steps.map((s, i) => <li key={s} className={state(i)}><i></i>{t(s)}</li>)}
                 </ol>
               )}
               <ul className="osum">
-                {order.items.map((l) => <li key={l.id}><span>{l.qty} × {l.name}</span><span>{rupee(l.price * l.qty)}</span></li>)}
-                <li><span>Delivery</span><span>{order.deliveryFee === 0 ? 'Free' : rupee(order.deliveryFee)}</span></li>
-                {order.gst?.total > 0 && <li><span>CGST</span><span>{rupee(order.gst.cgst)}</span></li>}
-                {order.gst?.total > 0 && <li><span>SGST</span><span>{rupee(order.gst.sgst)}</span></li>}
-                <li className="grand"><span>Total</span><span>{rupee(order.total)}</span></li>
-                <li><span>Payment</span><span>{order.paymentMethod === 'cod' ? 'Cash on delivery' : PAY_LABEL[order.payApp] || 'UPI'} · {{ paid: 'Paid', cod_due: 'Pay on delivery', pending: 'Pending', failed: 'Failed', not_paid: 'Not paid', refund_pending: 'Refund in progress', refunded: 'Refunded', refund_failed: 'Refund delayed' }[order.paymentStatus] || order.paymentStatus}</span></li>
+                {order.items.map((l) => <li key={l.id}><span>{l.qty} × {itemName(l.id, l.name)}</span><span>{rupee(l.price * l.qty)}</span></li>)}
+                <li><span>{t('Delivery')}</span><span>{order.deliveryFee === 0 ? t('Free') : rupee(order.deliveryFee)}</span></li>
+                {order.gst?.total > 0 && <li><span>{t('CGST')}</span><span>{rupee(order.gst.cgst)}</span></li>}
+                {order.gst?.total > 0 && <li><span>{t('SGST')}</span><span>{rupee(order.gst.sgst)}</span></li>}
+                <li className="grand"><span>{t('Total')}</span><span>{rupee(order.total)}</span></li>
+                <li><span>{t('Payment')}</span><span>{order.paymentMethod === 'cod' ? t('Cash on delivery') : t(PAY_LABEL[order.payApp] || 'UPI')} · {t(({ paid: 'Paid', cod_due: 'Pay on delivery', pending: 'Pending', failed: 'Failed', not_paid: 'Not paid', refund_pending: 'Refund in progress', refunded: 'Refunded', refund_failed: 'Refund delayed' })[order.paymentStatus] || order.paymentStatus)}</span></li>
               </ul>
               <OrderActions key={order.state} order={order} onChange={setOrder} />
               <RateOrder order={order} onChange={setOrder} />
             </div>
           )}
 
-          {error && <p className="err" role="alert">{error} Check the ID in your confirmation and try again.</p>}
+          {error && <p className="err" role="alert">{error} {t('Check the ID in your confirmation and try again.')}</p>}
         </div>
       </section>
     </>

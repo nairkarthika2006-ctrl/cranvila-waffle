@@ -11,15 +11,17 @@ import Cart from './pages/Cart.jsx'
 import Policy from './pages/Policy.jsx'
 import Admin from './pages/Admin.jsx'
 import MenuItem from './pages/MenuItem.jsx'
+import { useI18n } from './context/I18n.jsx'
 
-const titles = { '/': 'Home', '/about': 'About us', '/menu': 'Menu', '/tracking': 'Order tracking', '/contact': 'Contact', '/cart': 'Your order', '/cancellation-policy': 'Cancellation policy', '/admin': 'Staff dashboard' }
+const titles = { '/': 'home', '/about': 'about', '/menu': 'menu', '/tracking': 'tracking', '/contact': 'contact', '/cart': 'cart', '/cancellation-policy': 'Cancellation policy', '/admin': 'Staff dashboard' }
 
 export default function App() {
   const { pathname } = useLocation()
+  const { t } = useI18n()
   useEffect(() => {
     window.scrollTo(0, 0)
-    document.title = `${pathname.startsWith('/menu/') ? 'Menu item' : titles[pathname] || 'Home'} | Cranvila Waffle`
-  }, [pathname])
+    document.title = `${t(pathname.startsWith('/menu/') ? 'Menu item' : titles[pathname] || 'Home')} | Cranvila Waffle`
+  }, [pathname, t])
 
   return (
     <>

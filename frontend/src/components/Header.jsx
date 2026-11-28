@@ -26,7 +26,7 @@ export default function Header() {
   return (
     <header className={`top${scrolled ? ' scrolled' : ''}`}>
       <Link className="brand" to="/"><span>Cranvila Waffle</span></Link>
-      <button className="burger" aria-label="Menu" aria-expanded={open} onClick={() => setOpen(!open)}>
+      <button className="burger" aria-label={t('Open menu')} aria-expanded={open} onClick={() => setOpen(!open)}>
         <span></span><span></span>
       </button>
       <nav className={open ? 'open' : ''}>
@@ -37,7 +37,7 @@ export default function Header() {
           {t('cart')}{count > 0 && <b className="badge">{count}</b>}
         </NavLink>
         <a className="call" href={PHONE_LINK}>{PHONE}</a>
-        <select className="lang-toggle" aria-label="Language" value={lang} onChange={(e) => setLang(e.target.value)}>
+        <select className="lang-toggle" aria-label={t('Language')} value={lang} onChange={(e) => setLang(e.target.value)}>
           <option value="en">EN</option><option value="hi">हिं</option><option value="gu">ગુ</option>
         </select>
       </nav>
